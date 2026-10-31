@@ -1,0 +1,106 @@
+{
+  "_note": "נתוני דוגמה לאב הטיפוס בלבד. המבנה לפי ARCHITECTURE סעיף 2. שדה שלא מופיע בשורה מקבל את ברירת המחדל של הטבלה.",
+  "posts": [
+    { "post_number": "0057", "video_name": "Geode-Candle", "cycle": "001",
+      "has_10": true, "has_15": true,
+      "editing_done": true, "editing_done_at": "2026-10-19T09:00:00+02:00",
+      "prompt": "Geode candle with crystal-like layers. Focus on the cut reveal and the colors.",
+      "landing_page": "course_main",
+      "status": "approved", "approved_at": "2026-10-21T16:30:00+02:00",
+      "text_done": true, "finished": true,
+      "created_at": "2026-10-15T10:00:00+02:00" },
+
+    { "post_number": "0058", "video_name": "Rose-Candle", "cycle": "001",
+      "has_15": true, "has_30": true,
+      "editing_done": true, "editing_done_at": "2026-10-19T09:00:00+02:00",
+      "prompt": "Pink rose candle, petals poured one by one. Soft romantic mood.",
+      "landing_page": "workshop",
+      "status": "approved", "approved_at": "2026-10-22T11:10:00+02:00",
+      "text_done": true, "finished": false,
+      "created_at": "2026-10-15T10:05:00+02:00" },
+
+    { "post_number": "0059", "video_name": "Jar-Pome", "cycle": "002",
+      "has_10": true, "has_30": true, "yt_long_seconds": 90, "images_ready": true,
+      "editing_done": true, "editing_done_at": "2026-10-30T08:30:00+02:00",
+      "prompt": "פוסט על נר רימון חדש. דגש על אווירה ביתית וחמה.",
+      "status": "draft",
+      "created_at": "2026-10-27T09:00:00+02:00" },
+
+    { "post_number": "0060", "video_name": "Peony-Candle", "cycle": "002",
+      "has_15": true, "has_60": true,
+      "editing_done": true, "editing_done_at": "2026-10-30T08:30:00+02:00",
+      "created_at": "2026-10-27T09:10:00+02:00" },
+
+    { "post_number": "0061", "video_name": "Honey-Wax", "cycle": "003",
+      "has_10": true, "has_15": true,
+      "created_at": "2026-10-31T08:00:00+02:00" },
+
+    { "post_number": "0062", "video_name": "Lavender-Tin", "cycle": "003",
+      "created_at": "2026-10-31T08:05:00+02:00" }
+  ],
+
+  "texts": [
+    { "post_number": "0057", "network": "facebook", "output_id": "0057_Geode-Candle_FB",
+      "versions": {
+        "10": { "on_screen_text": "Layers of crystal, poured by hand", "voiceover": "Every layer hides a new color." },
+        "15": { "on_screen_text": "Cut it open. Watch the geode appear", "voiceover": "We poured it layer by layer, and the reveal never gets old." } },
+      "description": "Crystal layers, one pour at a time. Learn the full technique here: [[LINK:landing]]" },
+    { "post_number": "0057", "network": "tiktok", "output_id": "0057_Geode-Candle_TT",
+      "versions": { "15": { "on_screen_text": "Wait for the cut…", "voiceover": "Would you have guessed what's inside?" } },
+      "description": "The satisfying geode reveal you asked for. #candlemaking #asmr" },
+    { "post_number": "0057", "network": "youtube_shorts", "output_id": "0057_Geode-Candle_YTS",
+      "versions": { "15": { "on_screen_text": "A geode, made of wax", "voiceover": "Layer by layer, until the colors meet." } },
+      "title": "Geode Candle Reveal",
+      "pinned_comment": "Which color should the next geode be?" },
+
+    { "post_number": "0058", "network": "facebook", "output_id": "0058_Rose-Candle_FB",
+      "versions": { "15": { "on_screen_text": "Petal by petal", "voiceover": "A rose that will never wilt." } },
+      "description": "Soft pink petals, poured slowly. Join the next workshop: [[LINK:landing]]" },
+    { "post_number": "0058", "network": "tiktok", "output_id": "0058_Rose-Candle_TT",
+      "versions": {
+        "15": { "on_screen_text": "A rose made of wax", "voiceover": "Each petal is poured on its own." },
+        "30": { "on_screen_text": "From melted wax to a full bloom", "voiceover": "It starts as a puddle of warm wax, and petal by petal, it becomes a rose." } },
+      "description": "Romance, but make it a candle. #rosecandle #handmade" },
+    { "post_number": "0058", "network": "youtube_shorts", "output_id": "0058_Rose-Candle_YTS",
+      "versions": {
+        "15": { "on_screen_text": "Petal by petal", "voiceover": "A rose that will never wilt." },
+        "30": { "on_screen_text": "Watch the rose bloom", "voiceover": "Slow pours, soft pink, and a little patience." } },
+      "title": "Pouring a Rose Candle",
+      "pinned_comment": "Pink or white for the next one?" },
+
+    { "post_number": "0059", "network": "facebook", "output_id": "0059_Jar-Pome_FB",
+      "versions": { "10": { "on_screen_text": "Pomegranate glow, poured by hand", "voiceover": "A little jar of warmth for your home." } },
+      "description": "Poured by hand, one jar at a time. Full course here: [[LINK:landing]]" },
+    { "post_number": "0059", "network": "tiktok", "output_id": "0059_Jar-Pome_TT",
+      "versions": { "30": { "on_screen_text": "Your cozy corner, in a jar", "voiceover": "Deep red wax, a soft wooden wick, and the scent of autumn evenings. This one stays on my desk." } },
+      "description": "Cozy season starts here. #candles #cozyhome" },
+    { "post_number": "0059", "network": "youtube_shorts", "output_id": "0059_Jar-Pome_YTS",
+      "versions": { "30": { "on_screen_text": "A jar of pomegranate glow", "voiceover": "Warm red tones, poured slowly, for the coziest corner of your home." } },
+      "title": "Pomegranate Candle – Cozy Home Glow",
+      "pinned_comment": "Would you light this one in the living room or the bedroom?" },
+    { "post_number": "0059", "network": "youtube", "output_id": "0059_Jar-Pome_YT",
+      "versions": { "long": { "on_screen_text": "Making a pomegranate jar candle", "voiceover": "Today we're pouring a pomegranate jar candle, from choosing the wax to the very first light." } },
+      "title": "How to Make a Pomegranate Jar Candle",
+      "description": "00:00 Intro\n00:20 Melting the wax\n00:55 Pouring\n01:20 First light\n\nLearn the full technique: [[LINK:landing]]\nShop: [[LINK:yt_fixed_1]]\nInstagram: [[LINK:yt_fixed_2]]\nNewsletter: [[LINK:yt_fixed_3]]",
+      "tags": "candle making, pomegranate candle, jar candle, diy candle",
+      "thumbnail_description_he": "צנצנת נר אדומה על שולחן עץ, תאורה חמה, וכיתוב גדול: נר רימון" },
+    { "post_number": "0059", "network": "pinterest", "output_id": "0059_Jar-Pome_PIN",
+      "versions": {
+        "img1": { "on_image_text": "Pomegranate Jar Candle" },
+        "img2": { "on_image_text": "Cozy Home Glow" },
+        "img3": { "on_image_text": "Poured by Hand" },
+        "img4": { "on_image_text": "DIY Candle Idea" } },
+      "title": "Pomegranate Jar Candle for a Cozy Home",
+      "description": "A warm red jar candle, poured by hand. Save for your next DIY weekend.",
+      "tags": "diy candle, cozy home, pomegranate" },
+    { "post_number": "0059", "network": "threads", "output_id": "0059_Jar-Pome_THR",
+      "description": "This little jar has been glowing on my desk all week. Pomegranate season is here." },
+    { "post_number": "0059", "network": "facebook_groups", "output_id": "0059_Jar-Pome_FBG",
+      "description": "Just finished this pomegranate jar candle. What scent would you pair with it?" },
+
+    { "post_number": "0060", "network": "facebook", "output_id": "0060_Peony-Candle_FB", "versions": { "15": {} } },
+    { "post_number": "0060", "network": "tiktok", "output_id": "0060_Peony-Candle_TT", "versions": { "15": {} } },
+    { "post_number": "0060", "network": "youtube_shorts", "output_id": "0060_Peony-Candle_YTS", "versions": { "15": {} } },
+    { "post_number": "0060", "network": "youtube", "output_id": "0060_Peony-Candle_YT", "versions": { "60": {} } }
+  ]
+}

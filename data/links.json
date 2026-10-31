@@ -1,0 +1,9 @@
+{
+  "links": [
+    { "id": "course_main", "name": "הקורס המלא", "url": "https://example.com/course", "kind": "variable" },
+    { "id": "workshop", "name": "סדנת נרות", "url": "https://example.com/workshop", "kind": "variable" },
+    { "id": "yt_fixed_1", "name": "החנות", "url": "https://example.com/shop", "kind": "fixed" },
+    { "id": "yt_fixed_2", "name": "אינסטגרם", "url": "https://example.com/instagram", "kind": "fixed" },
+    { "id": "yt_fixed_3", "name": "ניוזלטר", "url": "https://example.com/newsletter", "kind": "fixed" }
+  ]
+}
