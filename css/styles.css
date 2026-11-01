@@ -321,6 +321,14 @@ img { max-width: 100%; display: block; }
   background: var(--muted); color: var(--text); font-size: 14px; font-weight: 700; line-height: 1.5;
 }
 .field-hint { margin-block-start: 6px; font-size: 14px; color: var(--text); }
+
+/* תפריט שלוש הנקודות של פוסט: יושב ב-body, במיקום שמחושב מהכפתור */
+.act-cell { width: 56px; padding-inline: 6px 12px; }
+.act-btn { background: transparent; }
+.act-btn:hover, .act-btn[aria-expanded="true"] { background: var(--muted); }
+.act-menu { position: fixed; top: 0; inset-inline-end: auto; z-index: 60; }
+.act-menu .icon { color: var(--primary-dark); }
+.card-act { margin-inline-start: auto; }
 .field-hint:empty { display: none; }
 .tbl .ck-cell .check { justify-content: center; }
 .flash-area { display: grid; gap: 12px; margin-block-end: var(--s2); }

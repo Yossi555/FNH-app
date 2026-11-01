@@ -101,6 +101,39 @@ export async function setFinished(numbers, value) {
   saveDb();
 }
 
+// ===== מחיקה והעברה של פוסט (ARCHITECTURE סעיף 5, פעולות 7 ו-8) =====
+// מותר רק ליוסי, ורק כש-editing_done = false. המספור לא משתנה.
+
+// מחיקה: הפוסט ושורות המלל שלו, כמו on delete cascade
+export async function deletePost(number) {
+  const db = getDb();
+  const index = db.posts.findIndex((p) => p.post_number === number);
+  if (index === -1 || db.posts[index].editing_done) throw new Error("אי אפשר למחוק את הפוסט הזה.");
+  db.posts.splice(index, 1);
+  for (let i = db.texts.length - 1; i >= 0; i--) if (db.texts[i].post_number === number) db.texts.splice(i, 1);
+  saveDb();
+}
+
+// העברה: רק מספר המחזור משתנה. output_id לא כולל את המחזור, ולכן גם הוא לא משתנה
+export async function movePost(number, cycle) {
+  const post = getDb().posts.find((p) => p.post_number === number);
+  if (!post || post.editing_done) throw new Error("אי אפשר להעביר את הפוסט הזה.");
+  post.cycle = cycle;
+  saveDb();
+}
+
+// המחזורים שאפשר להעביר אליהם: מחזורים שיש בהם פוסטים עם editing_done = false, חוץ מהמחזור הנוכחי,
+// ומחזור חדש אחרי הגבוה ביותר.
+// הנחה: "המחזור המוצע הבא" ב-ARCHITECTURE הוא המחזור החדש, כי המחזור המוצע הפתוח כבר ברשימה
+export function moveTargets(posts, current) {
+  const open = [...new Set(posts.filter((p) => !p.editing_done).map((p) => p.cycle))]
+    .filter((c) => c !== current)
+    .sort();
+  const top = posts.map((p) => p.cycle).sort().at(-1) || "000";
+  const fresh = String(Number(top) + 1).padStart(3, "0");
+  return [...open.map((cycle) => ({ cycle, isNew: false })), { cycle: fresh, isNew: true }];
+}
+
 // ===== המסך: רשימת המחזור =====
 
 export const LENGTHS = ["10", "15", "30", "60"];
@@ -152,8 +185,19 @@ function longCell(post) {
     : `<span aria-hidden="true">—</span><span class="sr-only">אין</span>`;
 }
 
+// כפתור שלוש הנקודות: ליוסי בלבד, ורק לפני ה"סיימתי" שלו על הפוסט
+function canEdit(post, isOwner) {
+  return isOwner && !post.editing_done;
+}
+
+function actionsButton(post) {
+  return `<button type="button" class="icon-btn act-btn" data-actions="${post.post_number}"
+            aria-haspopup="menu" aria-expanded="false" aria-label="פעולות לפוסט ${post.post_number}">${icon("dots")}</button>`;
+}
+
 function renderPosts(posts, isOwner) {
   const showFinished = isOwner && posts.some((p) => p.text_done);
+  const showActions = posts.some((p) => canEdit(p, isOwner));
   if (!posts.length) {
     return `<p class="empty-state">אין עדיין פוסטים במחזור הזה.${isOwner ? " לחצו \"+ הוספת פוסט\" כדי להתחיל." : ""}</p>`;
   }
@@ -177,6 +221,7 @@ function renderPosts(posts, isOwner) {
       <td class="chev-cell">
         <a class="back-btn" href="#/post/${p.post_number}" aria-label="פתיחת פוסט ${p.post_number}">${icon("forward")}</a>
       </td>
+      ${showActions ? `<td class="act-cell">${canEdit(p, isOwner) ? actionsButton(p) : ""}</td>` : ""}
     </tr>`).join("");
 
   const cards = posts.map((p) => `
@@ -190,6 +235,7 @@ function renderPosts(posts, isOwner) {
       <div class="check-row">
         ${imagesCheck(p, isOwner, true)}
         ${p.yt_long_seconds ? `<span class="small">ארוכה: ${longCell(p)}</span>` : ""}
+        ${canEdit(p, isOwner) ? `<span class="card-act">${actionsButton(p)}</span>` : ""}
       </div>
     </li>`).join("");
 
@@ -204,6 +250,7 @@ function renderPosts(posts, isOwner) {
           <th scope="colgroup" colspan="${LENGTHS.length + 1}" class="th-group">גרסאות</th>
           <th scope="col" rowspan="2" class="ck-cell">תמונות</th>
           <th scope="col" rowspan="2">סטטוס</th><th scope="col" rowspan="2"><span class="sr-only">פתיחה</span></th>
+          ${showActions ? `<th scope="col" rowspan="2"><span class="sr-only">פעולות</span></th>` : ""}
         </tr>
         <tr class="th-sub">
           ${LENGTHS.map((len) => `<th scope="col" class="ck-cell">${len}</th>`).join("")}
@@ -251,7 +298,20 @@ export async function cycleScreen(cycle, user) {
     // לחיצה על שורה פותחת את הפוסט, חוץ מלחיצה על תיבת סימון או על הקישור
     list.addEventListener("click", (e) => {
       const row = e.target.closest("tr[data-href]");
-      if (row && !e.target.closest("a, .ck-cell")) location.hash = row.dataset.href;
+      if (row && !e.target.closest("a, .ck-cell, .act-cell")) location.hash = row.dataset.href;
+    });
+
+    // תפריט שלוש הנקודות: "העברה למחזור אחר" ו"מחיקת פוסט"
+    list.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-actions]");
+      if (!btn) return;
+      // לחיצה שנייה על הכפתור סוגרת את התפריט
+      if (btn.getAttribute("aria-expanded") === "true") return closeActions();
+      const post = posts.find((p) => p.post_number === btn.dataset.actions);
+      openActions(btn, [
+        { icon: "move", label: "העברה למחזור אחר", run: () => openMovePost(post) },
+        { icon: "trash", label: "מחיקת פוסט", run: () => openDeletePost(post) },
+      ]);
     });
 
     // שינוי באורכים, בתמונות או ב"גמור" נשמר מיד. בטבלה ובכרטיסים יש אותה תיבה פעמיים, ושתיהן מתעדכנות
@@ -401,4 +461,107 @@ function openNewPost(cycle) {
       ? `<span class="len-tag" dir="ltr">${minutesText(value)}</span> דקות`
       : "";
   });
+}
+
+// ===== תפריט הפעולות של פוסט =====
+// התפריט נפתח מתחת לכפתור, ויושב ב-body כדי שהגלילה של הטבלה לא תחתוך אותו.
+// מקלדת: חצים למעלה ולמטה, Esc סוגר ומחזיר לכפתור, Tab סוגר.
+
+function openActions(btn, items) {
+  closeActions();
+  const menu = document.createElement("div");
+  menu.className = "menu act-menu";
+  menu.setAttribute("role", "menu");
+  menu.setAttribute("aria-label", btn.getAttribute("aria-label"));
+  menu.innerHTML = items.map((item, i) =>
+    `<button type="button" role="menuitem" data-i="${i}" tabindex="-1">${icon(item.icon)} ${item.label}</button>`).join("");
+  document.body.append(menu);
+  btn.setAttribute("aria-expanded", "true");
+
+  // המיקום: מתחת לכפתור, ומעליו אם אין מקום. הקצה של התפריט מיושר לקצה של הכפתור
+  const r = btn.getBoundingClientRect();
+  const below = r.bottom + 6 + menu.offsetHeight <= innerHeight;
+  menu.style.top = `${below ? r.bottom + 6 : r.top - 6 - menu.offsetHeight}px`;
+  menu.style.left = `${Math.max(8, Math.min(r.left, innerWidth - menu.offsetWidth - 8))}px`;
+
+  const buttons = $$("button", menu);
+  buttons[0].focus();
+
+  const close = (refocus) => {
+    menu.remove();
+    btn.setAttribute("aria-expanded", "false");
+    document.removeEventListener("pointerdown", onOutside, true);
+    removeEventListener("scroll", onMove, true);
+    removeEventListener("resize", onMove);
+    activeClose = null;
+    if (refocus) btn.focus();
+  };
+  const onOutside = (e) => { if (!menu.contains(e.target) && e.target.closest("button") !== btn) close(false); };
+  const onMove = () => close(false);
+  activeClose = close;
+
+  menu.addEventListener("keydown", (e) => {
+    const i = buttons.indexOf(document.activeElement);
+    if (e.key === "ArrowDown") { e.preventDefault(); buttons[(i + 1) % buttons.length].focus(); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); buttons[(i - 1 + buttons.length) % buttons.length].focus(); }
+    else if (e.key === "Escape") { e.preventDefault(); close(true); }
+    else if (e.key === "Tab") close(true);
+  });
+  menu.addEventListener("click", (e) => {
+    const item = e.target.closest("button[data-i]");
+    if (!item) return;
+    // החלון שנפתח מחזיר את המיקוד לכפתור כשהוא נסגר
+    close(true);
+    items[item.dataset.i].run();
+  });
+  document.addEventListener("pointerdown", onOutside, true);
+  addEventListener("scroll", onMove, true);
+  addEventListener("resize", onMove);
+}
+
+let activeClose = null;
+function closeActions() {
+  activeClose?.(false);
+}
+
+// ===== חלון: העברת פוסט (DESIGN, מסך 3א) =====
+
+async function openMovePost(post) {
+  const targets = moveTargets(await listPosts(), post.cycle);
+  openModal({
+    title: `העברת פוסט ${post.post_number}`,
+    primary: "העברה",
+    body: `
+      <div class="field">
+        <label for="move-target">למחזור</label>
+        <select class="select" id="move-target" name="target" aria-describedby="move-hint">
+          ${targets.map((t) => `<option value="${t.cycle}">${t.cycle}${t.isNew ? " (מחזור חדש)" : ""}</option>`).join("")}
+        </select>
+        <p class="field-hint" id="move-hint">מספר הפוסט לא משתנה.</p>
+      </div>`,
+    async onSubmit(form) {
+      const target = form.elements.target.value;
+      await movePost(post.post_number, target);
+      setFlash([{ kind: "ok", html: `הפוסט <b dir="ltr">${post.post_number}</b> הועבר למחזור <b dir="ltr">${target}</b>` }]);
+      rerender();
+    },
+  });
+}
+
+// ===== חלון: מחיקת פוסט (DESIGN, מסך 3א) =====
+
+function openDeletePost(post) {
+  const { form } = openModal({
+    title: `למחוק את פוסט ${post.post_number}?`,
+    primary: "מחיקה",
+    primaryClass: "btn-alert",
+    body: `<p>הפוסט ושורות המלל שלו יימחקו, ואי אפשר לבטל את זה.</p>`,
+    async onSubmit() {
+      await deletePost(post.post_number);
+      setFlash([{ kind: "ok", html: `הפוסט <b dir="ltr">${post.post_number}</b> נמחק` }]);
+      rerender();
+    },
+  });
+  // הנחה: המיקוד מתחיל ב"ביטול", כדי ש-Enter לא ימחק בטעות
+  $(".modal-cancel", form).focus();
 }

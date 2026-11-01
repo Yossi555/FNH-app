@@ -20,9 +20,10 @@ function isMarked(post) {
 export function cycleStage(posts) {
   const total = posts.length;
   const count = (fn) => posts.filter(fn).length;
+  const postsText = total === 1 ? "פוסט אחד" : `${total} פוסטים`;
 
   if (posts.some((p) => !p.editing_done)) {
-    return { stage: "edit", who: "owner", line: `${total} פוסטים`, done: count(isMarked), total };
+    return { stage: "edit", who: "owner", line: postsText, done: count(isMarked), total };
   }
   if (posts.some((p) => !p.text_done)) {
     const start = Math.min(...posts.map((p) => new Date(p.editing_done_at).getTime()));
@@ -33,7 +34,7 @@ export function cycleStage(posts) {
     const done = count((p) => p.finished);
     return { stage: "complete", who: "owner", line: `${done} מתוך ${total} גמורים`, done, total };
   }
-  return { stage: "done", who: null, line: `${total} פוסטים גמורים`, done: total, total };
+  return { stage: "done", who: null, line: total === 1 ? "פוסט אחד גמור" : `${total} פוסטים גמורים`, done: total, total };
 }
 
 // כרטיס לכל מחזור. פעילים קודם, מהמספר הגבוה לנמוך, ואחריהם המחזורים שהושלמו
