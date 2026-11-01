@@ -45,14 +45,24 @@ async function route() {
     return go("#/dashboard");
   }
   // רשימת המחזור זוכרת מאיזה מסך הגיעו, בשביל חץ החזרה
-  if (name === "dashboard" || name === "tasks") setListOrigin(`#/${name}`);
-  renderShell(user, await screen(param, user));
+  const isList = name === "dashboard" || name === "tasks";
+  if (isList) setListOrigin(`#/${name}`);
+  const view = await screen(param, user);
+  // תמונת הרקע: רק בלוח הבקרה וב"המשימות שלי". לא ברשימת המחזור ולא במסך הפוסט
+  setBackground(isList ? "page" : null);
+  renderShell(user, view);
+}
+
+function setBackground(kind) {
+  if (kind) document.body.dataset.bg = kind;
+  else delete document.body.dataset.bg;
 }
 
 // ===== מסך 1: כניסה =====
 
 function renderLogin() {
   document.title = "כניסה · FNH Pipeline";
+  setBackground("login");
   app.innerHTML = `
     <main class="login">
       <img class="login-logo" src="assets/logo.png" alt="Fun N' Handy – Do what you love">

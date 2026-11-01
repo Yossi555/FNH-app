@@ -533,12 +533,22 @@ img { max-width: 100%; display: block; }
 .login {
   min-height: 100vh; padding: var(--s3) var(--s2);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: var(--s3);
-  /* הנחה: אין תמונת רקע בתיקייה, ולכן מעבר צבע חמים במקום הצילום המטושטש */
-  background:
-    radial-gradient(circle at 20% 15%, rgba(255, 255, 255, .7), transparent 45%),
-    radial-gradient(circle at 85% 90%, rgba(158, 125, 95, .28), transparent 55%),
-    linear-gradient(160deg, #F7EBDD, #E9D3BC);
 }
+
+/* ===== רקע תמונה (DESIGN, חלק 2) ===== */
+/* שכבה קבועה עם position: fixed, ולא background-attachment: fixed, שלא עובד טוב באייפון.
+   הדפדפן בוחר קובץ לפי רוחב המסך. מעל התמונה שכבת קרם: 30% בכניסה, 75% בלוח הבקרה וב"המשימות שלי" */
+.bg-photo {
+  display: none; position: fixed; inset: 0; z-index: -1;
+  background: url(../assets/backgrounds/workshop-960.webp) 70% 50% / cover no-repeat;
+}
+.bg-photo::after { content: ""; position: absolute; inset: 0; background: rgba(255, 247, 236, .75); }
+body[data-bg] .bg-photo { display: block; }
+body[data-bg="login"] .bg-photo::after { background: rgba(255, 247, 236, .3); }
+/* קישורי טקסט שיושבים ישירות על התמונה ("יציאה", "רענון"): צבע הכותרות, כי #6C5546 מגיע שם רק ל-3.6 */
+body[data-bg] .link-btn { color: var(--text-head); }
+@media (min-width: 961px) { .bg-photo { background-image: url(../assets/backgrounds/workshop-1280.webp); } }
+@media (min-width: 1281px) { .bg-photo { background-image: url(../assets/backgrounds/workshop-1920.webp); } }
 .login-logo { width: min(260px, 70vw); }
 .login-card {
   width: min(400px, 100%); background: var(--bg);
