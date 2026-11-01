@@ -1,5 +1,5 @@
 {
-  "_note": "נתוני דוגמה לאב הטיפוס בלבד. המבנה לפי ARCHITECTURE סעיף 2. שדה שלא מופיע בשורה מקבל את ברירת המחדל של הטבלה.",
+  "_note": "נתוני דוגמה לאב הטיפוס בלבד. המבנה לפי ARCHITECTURE סעיף 2. שדה שלא מופיע בשורה מקבל את ברירת המחדל של הטבלה. מחזור אחד בכל שלב של לוח הבקרה: 001 הושלם, 002 השלמת גרסאות, 003 כתיבת מלל, 004 עריכה והזנה.",
   "posts": [
     { "post_number": "0057", "video_name": "Geode-Candle", "cycle": "001",
       "has_10": true, "has_15": true,
@@ -16,27 +16,53 @@
       "prompt": "Pink rose candle, petals poured one by one. Soft romantic mood.",
       "landing_page": "workshop",
       "status": "approved", "approved_at": "2026-10-22T11:10:00+02:00",
-      "text_done": true, "finished": false,
+      "text_done": true, "finished": true,
       "created_at": "2026-10-15T10:05:00+02:00" },
 
     { "post_number": "0059", "video_name": "Jar-Pome", "cycle": "002",
       "has_10": true, "has_30": true, "yt_long_seconds": 90, "images_ready": true,
-      "editing_done": true, "editing_done_at": "2026-10-30T08:30:00+02:00",
+      "editing_done": true, "editing_done_at": "2026-10-24T08:30:00+02:00",
       "prompt": "פוסט על נר רימון חדש. דגש על אווירה ביתית וחמה.",
-      "status": "draft",
-      "created_at": "2026-10-27T09:00:00+02:00" },
+      "landing_page": "course_main",
+      "status": "approved", "approved_at": "2026-10-26T12:00:00+02:00",
+      "text_done": true, "finished": true,
+      "created_at": "2026-10-22T09:00:00+02:00" },
 
     { "post_number": "0060", "video_name": "Peony-Candle", "cycle": "002",
       "has_15": true, "has_60": true,
-      "editing_done": true, "editing_done_at": "2026-10-30T08:30:00+02:00",
-      "created_at": "2026-10-27T09:10:00+02:00" },
+      "editing_done": true, "editing_done_at": "2026-10-24T08:30:00+02:00",
+      "prompt": "Peony candle in soft blush tones. Calm, slow pours, spring feeling.",
+      "landing_page": "workshop",
+      "status": "approved", "approved_at": "2026-10-26T15:40:00+02:00",
+      "text_done": true, "finished": false,
+      "created_at": "2026-10-22T09:10:00+02:00" },
 
-    { "post_number": "0061", "video_name": "Honey-Wax", "cycle": "003",
+    { "post_number": "0061", "video_name": "Beeswax-Pillar", "cycle": "003",
       "has_10": true, "has_15": true,
-      "created_at": "2026-10-31T08:00:00+02:00" },
+      "editing_done": true, "editing_done_at": "2026-10-31T09:00:00+02:00",
+      "prompt": "Natural beeswax pillar candle. Honey color, the smell of a workshop.",
+      "landing_page": "course_main",
+      "status": "approved", "approved_at": "2026-11-01T10:20:00+02:00",
+      "created_at": "2026-10-29T09:00:00+02:00" },
 
-    { "post_number": "0062", "video_name": "Lavender-Tin", "cycle": "003",
-      "created_at": "2026-10-31T08:05:00+02:00" }
+    { "post_number": "0062", "video_name": "Citrus-Soy", "cycle": "003",
+      "has_15": true, "has_30": true,
+      "editing_done": true, "editing_done_at": "2026-10-31T09:00:00+02:00",
+      "prompt": "נר סויה עם קליפות הדרים. רענן, קיצי, צבעוני.",
+      "status": "draft",
+      "created_at": "2026-10-29T09:10:00+02:00" },
+
+    { "post_number": "0063", "video_name": "Ocean-Gel", "cycle": "003",
+      "has_30": true,
+      "editing_done": true, "editing_done_at": "2026-10-31T09:00:00+02:00",
+      "created_at": "2026-10-29T09:20:00+02:00" },
+
+    { "post_number": "0064", "video_name": "Honey-Wax", "cycle": "004",
+      "has_10": true, "has_15": true,
+      "created_at": "2026-11-01T08:00:00+02:00" },
+
+    { "post_number": "0065", "video_name": "Lavender-Tin", "cycle": "004",
+      "created_at": "2026-11-01T08:05:00+02:00" }
   ],
 
   "texts": [
@@ -98,9 +124,52 @@
     { "post_number": "0059", "network": "facebook_groups", "output_id": "0059_Jar-Pome_FBG",
       "description": "Just finished this pomegranate jar candle. What scent would you pair with it?" },
 
-    { "post_number": "0060", "network": "facebook", "output_id": "0060_Peony-Candle_FB", "versions": { "15": {} } },
-    { "post_number": "0060", "network": "tiktok", "output_id": "0060_Peony-Candle_TT", "versions": { "15": {} } },
-    { "post_number": "0060", "network": "youtube_shorts", "output_id": "0060_Peony-Candle_YTS", "versions": { "15": {} } },
-    { "post_number": "0060", "network": "youtube", "output_id": "0060_Peony-Candle_YT", "versions": { "60": {} } }
+    { "post_number": "0060", "network": "facebook", "output_id": "0060_Peony-Candle_FB",
+      "versions": { "15": { "on_screen_text": "A peony that blooms in wax", "voiceover": "Soft blush petals, poured slowly, one at a time." } },
+      "description": "Spring on your table, all year long. Join the workshop: [[LINK:landing]]" },
+    { "post_number": "0060", "network": "tiktok", "output_id": "0060_Peony-Candle_TT",
+      "versions": { "15": { "on_screen_text": "Watch it bloom", "voiceover": "This peony took three pours and a lot of patience." } },
+      "description": "Blush tones only. #peony #candlemaking" },
+    { "post_number": "0060", "network": "youtube_shorts", "output_id": "0060_Peony-Candle_YTS",
+      "versions": { "15": { "on_screen_text": "Peony candle, start to finish", "voiceover": "From warm wax to a full spring bloom." } },
+      "title": "Pouring a Peony Candle",
+      "pinned_comment": "Blush or white for the next flower?" },
+    { "post_number": "0060", "network": "youtube", "output_id": "0060_Peony-Candle_YT",
+      "versions": { "60": { "on_screen_text": "Making a peony candle", "voiceover": "In one minute, we go from melted wax to a soft blush peony, petal by petal." } },
+      "title": "How to Pour a Peony Candle in One Minute",
+      "description": "Every petal, start to finish.\n\nJoin the workshop: [[LINK:landing]]\nShop: [[LINK:yt_fixed_1]]\nInstagram: [[LINK:yt_fixed_2]]\nNewsletter: [[LINK:yt_fixed_3]]",
+      "tags": "peony candle, flower candle, candle making",
+      "thumbnail_description_he": "נר פיוני ורוד על רקע בהיר, וכיתוב: פיוני בדקה" },
+
+    { "post_number": "0061", "network": "facebook", "output_id": "0061_Beeswax-Pillar_FB",
+      "versions": {
+        "10": { "on_screen_text": "Pure beeswax, poured by hand", "voiceover": "It even smells like honey." },
+        "15": { "on_screen_text": "A pillar of honey-colored light", "voiceover": "Natural beeswax, a cotton wick, and nothing else." } },
+      "description": "Simple, natural, and glowing. The full course is here: [[LINK:landing]]" },
+    { "post_number": "0061", "network": "tiktok", "output_id": "0061_Beeswax-Pillar_TT",
+      "versions": { "15": { "on_screen_text": "POV: your workshop smells like honey", "voiceover": "Beeswax is my favorite thing to pour on a quiet morning." } },
+      "description": "Honey season in the workshop. #beeswax #handmade" },
+    { "post_number": "0061", "network": "youtube_shorts", "output_id": "0061_Beeswax-Pillar_YTS",
+      "versions": { "15": { "on_screen_text": "Beeswax pillar candle", "voiceover": "Golden wax, poured slow, for a calm warm glow." } },
+      "title": "Pouring a Beeswax Pillar",
+      "pinned_comment": "Have you ever tried working with beeswax?" },
+
+    { "post_number": "0062", "network": "facebook", "output_id": "0062_Citrus-Soy_FB",
+      "versions": { "15": { "on_screen_text": "Summer in a jar", "voiceover": "Soy wax with real citrus peels." } },
+      "description": "Fresh, bright and handmade. Learn how: [[LINK:landing]]" },
+    { "post_number": "0062", "network": "tiktok", "output_id": "0062_Citrus-Soy_TT",
+      "versions": {
+        "15": { "on_screen_text": "Orange, lemon, lime", "voiceover": "Which slice would you add?" },
+        "30": { "on_screen_text": "A citrus candle, step by step", "voiceover": "We dry the peels, pour the soy wax, and press every slice by hand." } },
+      "description": "Smells like summer. #citrus #soycandle" },
+    { "post_number": "0062", "network": "youtube_shorts", "output_id": "0062_Citrus-Soy_YTS",
+      "versions": {
+        "15": { "on_screen_text": "Citrus soy candle", "voiceover": "Bright colors for a grey day." },
+        "30": { "on_screen_text": "Pressing citrus into wax", "voiceover": "" } },
+      "title": "Citrus Soy Candle",
+      "pinned_comment": "Orange or lemon?" },
+
+    { "post_number": "0063", "network": "tiktok", "output_id": "0063_Ocean-Gel_TT", "versions": { "30": {} } },
+    { "post_number": "0063", "network": "youtube_shorts", "output_id": "0063_Ocean-Gel_YTS", "versions": { "30": {} } }
   ]
 }
