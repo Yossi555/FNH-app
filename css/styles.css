@@ -431,7 +431,7 @@ img { max-width: 100%; display: block; }
 .task-card:hover { background: var(--muted); }
 .task-card-body { display: grid; gap: 6px; }
 .task-card > .icon { color: var(--primary-dark); }
-/* "ממתין לשרית": שורה אפורה, כי אין בה פעולה ליוסי */
+/* "שרית – כתיבת מלל" אצל יוסי: שורה אפורה, כי אין בה פעולה ליוסי */
 .tbl tr.is-waiting td { background: var(--bg); color: var(--primary-dark); }
 .tbl tr.is-waiting .num { color: var(--primary-dark); }
 .task-card.is-waiting { background: var(--bg); box-shadow: none; border: 1px dashed var(--muted); color: var(--primary-dark); }

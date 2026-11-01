@@ -3,9 +3,16 @@
 
 import { DUE_DAYS } from "./config.js";
 import { listPosts, postStatus, suggestCycle } from "./posts.js";
-import { esc, icon, badge, shortDate, openModal, rerender, STATUS_LABELS, $, $$ } from "./ui.js";
+import { esc, icon, badge, shortDate, openModal, rerender, PEOPLE, STATUS_LABELS, $, $$ } from "./ui.js";
 
-const TASK_LABELS = { edit: "עריכה והזנה", text: "כתיבת מלל", complete: "השלמת גרסאות", wait: "ממתין לשרית" };
+// כל משימה מנוסחת "מי – שלב" (ARCHITECTURE סעיף 5, עודכן ב-1.11.2026).
+// "wait" היא השורה האפורה אצל יוסי, כשהמחזור אצל שרית. קודם היא נקראה "ממתין לשרית"
+const TASK_LABELS = {
+  edit: `${PEOPLE.owner} – עריכה והזנה`,
+  text: `${PEOPLE.user} – כתיבת מלל`,
+  complete: `${PEOPLE.owner} – השלמת גרסאות`,
+  wait: `${PEOPLE.user} – כתיבת מלל`,
+};
 const STATUS_ORDER = ["empty", "draft", "approved", "finished"];
 
 // ===== חישוב =====
@@ -41,7 +48,7 @@ export function computeTasks(posts, role) {
         tasks.push({ ...base, type: "complete", due: null });
       }
       // החלטה של יוסי (31.10), תוספת לטבלה ב-ARCHITECTURE סעיף 5: מחזור ששרית כותבת בו
-      // מופיע ליוסי כשורה אפורה "ממתין לשרית", בלי התראה ובלי תאריך יעד, כדי שיוכל להגיע אליו
+      // מופיע ליוסי כשורה אפורה "שרית – כתיבת מלל", בלי התראה ובלי תאריך יעד, כדי שיוכל להגיע אליו
       if (tasks.length === before && cyclePosts.some((p) => p.editing_done && !p.text_done)) {
         tasks.push({ ...base, type: "wait", due: null });
       }
