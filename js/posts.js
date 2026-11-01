@@ -122,16 +122,14 @@ export async function movePost(number, cycle) {
   saveDb();
 }
 
-// המחזורים שאפשר להעביר אליהם: מחזורים שיש בהם פוסטים עם editing_done = false, חוץ מהמחזור הנוכחי,
-// ומחזור חדש אחרי הגבוה ביותר.
-// הנחה: "המחזור המוצע הבא" ב-ARCHITECTURE הוא המחזור החדש, כי המחזור המוצע הפתוח כבר ברשימה
+// המחזורים שאפשר להעביר אליהם: כל המחזורים חוץ מהנוכחי, ומחזור חדש אחרי הגבוה ביותר.
+// החלטה של יוסי (1.11.2026), במקום ההנחה ב-DESIGN וב-ARCHITECTURE שהגבילה למחזורים פתוחים.
+// פוסט שמועבר למחזור שיוסי כבר סיים מחזיר אותו ל"עריכה והזנה", עד שיוסי ילחץ שוב "סיימתי"
 export function moveTargets(posts, current) {
-  const open = [...new Set(posts.filter((p) => !p.editing_done).map((p) => p.cycle))]
-    .filter((c) => c !== current)
-    .sort();
+  const cycles = [...new Set(posts.map((p) => p.cycle))].filter((c) => c !== current).sort();
   const top = posts.map((p) => p.cycle).sort().at(-1) || "000";
   const fresh = String(Number(top) + 1).padStart(3, "0");
-  return [...open.map((cycle) => ({ cycle, isNew: false })), { cycle: fresh, isNew: true }];
+  return [...cycles.map((cycle) => ({ cycle, isNew: false })), { cycle: fresh, isNew: true }];
 }
 
 // ===== המסך: רשימת המחזור =====
