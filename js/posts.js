@@ -4,7 +4,7 @@
 import { getDb, saveDb } from "./mock/store.js";
 import { START_POST_NUMBER } from "./config.js";
 import { createRows, renameRows } from "./rows.js";
-import { esc, icon, badge, openModal, rerender, setFlash, renderFlash, $, $$ } from "./ui.js";
+import { esc, icon, badge, openModal, rerender, listOrigin, setFlash, renderFlash, $, $$ } from "./ui.js";
 
 export async function listPosts() {
   return getDb().posts.map((p) => ({ ...p }));
@@ -310,7 +310,7 @@ export async function cycleScreen(cycle, user) {
     });
   }
 
-  return { title, back: "#/tasks", body, onMount };
+  return { title, back: listOrigin(), body, onMount };
 }
 
 // ===== השדות של יוסי: קריאה ובדיקה =====

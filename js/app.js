@@ -5,10 +5,11 @@
 //   #/tasks          המשימות שלי
 //   #/cycle/003      משימה בודדת: רשימת המחזור
 //   #/post/0059      משימה בודדת: פוסט
+// כתובת לא מוכרת מחזירה ל-#/dashboard
 
 import { loadDb, resetDb } from "./mock/store.js";
 import { login, logout, getUser } from "./auth.js";
-import { esc, icon, avatar, $, $$ } from "./ui.js";
+import { esc, icon, avatar, setListOrigin, $, $$ } from "./ui.js";
 import { dashboardScreen } from "./dashboard.js";
 import { tasksScreen } from "./tasks.js";
 import { cycleScreen } from "./posts.js";
@@ -36,13 +37,15 @@ async function route() {
     if (name !== "login") return go("#/login");
     return renderLogin();
   }
-  if (name === "login" || name === "") return go("#/tasks");
+  if (name === "login" || name === "") return go("#/dashboard");
 
   const screen = SCREENS[name];
-  // כתובת לא מוכרת, מחזור שאינו בן שלוש ספרות או פוסט שאינו בן ארבע ספרות, חוזרים ל"המשימות שלי"
+  // כתובת לא מוכרת, מחזור שאינו בן שלוש ספרות או פוסט שאינו בן ארבע ספרות, חוזרים ל"לוח בקרה"
   if (!screen || (name === "cycle" && !/^\d{3}$/.test(param)) || (name === "post" && !/^\d{4}$/.test(param))) {
-    return go("#/tasks");
+    return go("#/dashboard");
   }
+  // רשימת המחזור זוכרת מאיזה מסך הגיעו, בשביל חץ החזרה
+  if (name === "dashboard" || name === "tasks") setListOrigin(`#/${name}`);
   renderShell(user, await screen(param, user));
 }
 
@@ -110,7 +113,7 @@ function renderLogin() {
     btn.disabled = true;
     try {
       await login(userId, pw.value);
-      go("#/tasks");
+      go("#/dashboard");
     } catch (error) {
       showError(error.message);
       btn.disabled = false;
@@ -121,6 +124,15 @@ function renderLogin() {
 
 // ===== המעטפת: תפריט צד, פס עליון, וכותרת בטלפון =====
 
+// הפריטים בתפריט הצד ובתפריט ההמבורגר. הפריט הפעיל מסומן ב-aria-current
+const NAV = [["dashboard", "home", "לוח בקרה"], ["tasks", "checkbox", "המשימות שלי"]];
+
+function navLinks() {
+  const current = parseRoute().name;
+  return NAV.map(([name, ic, label]) =>
+    `<a href="#/${name}" ${current === name ? 'aria-current="page"' : ""}>${icon(ic)} ${label}</a>`).join("");
+}
+
 function renderShell(user, { title, back, body, onMount }) {
   document.title = `${title} · FNH Pipeline`;
   const backBtn = (cls) =>
@@ -130,10 +142,8 @@ function renderShell(user, { title, back, body, onMount }) {
     <a class="skip-link" href="#main">דילוג לתוכן</a>
     <div class="app">
       <aside class="sidebar" aria-label="תפריט ראשי">
-        <a class="brand" href="#/tasks"><img src="assets/logo.png" alt="Fun N' Handy – המשימות שלי"></a>
-        <nav class="nav">
-          <a href="#/tasks" ${parseRoute().name === "tasks" ? 'aria-current="page"' : ""}>${icon("home")} המשימות שלי</a>
-        </nav>
+        <a class="brand" href="#/dashboard"><img src="assets/logo.png" alt="Fun N' Handy – לוח בקרה"></a>
+        <nav class="nav">${navLinks()}</nav>
         <div class="proto-box">
           <p class="small">כלים לאב הטיפוס</p>
           <button class="link-btn small" data-action="reset">איפוס נתונים</button>
@@ -157,7 +167,7 @@ function renderShell(user, { title, back, body, onMount }) {
             <button class="icon-btn menu-btn" aria-expanded="false" aria-controls="mobile-menu" aria-label="תפריט">${icon("menu")}</button>
             <div class="menu" id="mobile-menu" hidden>
               <p class="menu-user">${esc(user.name)}</p>
-              <a href="#/tasks">${icon("home")} המשימות שלי</a>
+              ${navLinks()}
               <button data-action="logout">${icon("logout")} יציאה</button>
               <hr>
               <button class="small" data-action="reset">איפוס נתונים (אב טיפוס)</button>

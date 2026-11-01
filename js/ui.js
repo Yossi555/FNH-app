@@ -16,6 +16,7 @@ export function esc(value) {
 // אייקונים קוויים, בעובי אחיד, בצבע הטקסט (currentColor)
 const PATHS = {
   home: '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+  checkbox: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12l3 3 5-6"/>',
   user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>',
   lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>',
   alert: '<path d="M12 3l10 18H2z"/><path d="M12 10v5"/><path d="M12 18h.01"/>',
@@ -45,6 +46,22 @@ export const STATUS_LABELS = { empty: "ריק", draft: "טיוטה", approved: "
 export function badge(status, count) {
   const text = count === undefined ? STATUS_LABELS[status] : `${STATUS_LABELS[status]} ${count}`;
   return `<span class="badge badge-${status}">${text}</span>`;
+}
+
+// ===== חזרה מרשימת המחזור =====
+// החץ חוזר למסך שממנו הגיעו: "לוח בקרה" או "המשימות שלי" (DESIGN, "הניווט בין המסכים").
+// הנחה: בלי מסך קודם, למשל בכתובת שנפתחה ישירות, החץ חוזר ללוח הבקרה.
+
+const ORIGIN_KEY = "fnh-list-origin";
+let originFallback = "#/dashboard";
+
+export function setListOrigin(hash) {
+  originFallback = hash;
+  try { sessionStorage.setItem(ORIGIN_KEY, hash); } catch { /* נשאר רק בזיכרון */ }
+}
+
+export function listOrigin() {
+  try { return sessionStorage.getItem(ORIGIN_KEY) || originFallback; } catch { return originFallback; }
 }
 
 // ===== אווטאר =====

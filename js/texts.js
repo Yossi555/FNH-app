@@ -8,7 +8,7 @@ import { loadNetworks } from "./rows.js";
 import { relevantNetworks } from "../shared/relevance.js";
 import { loadLinks, variableLinks, renderLinks, resolveLinks, hasMissingLink } from "./links.js";
 import { generatePost, generateField, demoFailure } from "./ai.js";
-import { esc, icon, badge, openModal, copyButton, handleCopy, rerender, setFlash, renderFlash, $, $$ } from "./ui.js";
+import { esc, icon, badge, openModal, copyButton, handleCopy, rerender, listOrigin, setFlash, renderFlash, $, $$ } from "./ui.js";
 
 // ===== נתונים =====
 
@@ -375,7 +375,7 @@ export async function postScreen(number, user) {
   if (!post) {
     return {
       title: "הפוסט לא נמצא",
-      back: "#/tasks",
+      back: listOrigin(),
       body: `<div class="titlebar"><h1 class="page-title" tabindex="-1">הפוסט לא נמצא</h1></div>
              <p class="empty-state">אין פוסט עם המספר הזה.</p>`,
     };
