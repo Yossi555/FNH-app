@@ -1,6 +1,8 @@
 // רכיבים משותפים: אייקונים, הגנה על טקסט, וקיצורי DOM.
 // גם: חלון, הודעה אחרי פעולה וכפתור העתקה.
 
+import { USERS } from "./config.js";
+
 // מגן על טקסט שמוכנס ל-HTML
 export function esc(value) {
   return String(value ?? "")
@@ -46,12 +48,15 @@ export function badge(status, count) {
 }
 
 // ===== אווטאר =====
-// לפי "אווטאר" ב-DESIGN, חלק 2. עד שהתמונות יחוברו (שלב 2), עיגול עם האות הראשונה.
+// לפי "אווטאר" ב-DESIGN, חלק 2: התמונה מתוך USERS ב-config.js, והטקסט החלופי הוא השם.
+// מתחת לתמונה יש עיגול עם האות הראשונה. הוא נראה כשאין תמונה, או כשהיא לא נטענה.
 
-export const PEOPLE = { owner: "יוסי", user: "שרית" };
+export const PEOPLE = Object.fromEntries(Object.entries(USERS).map(([role, u]) => [role, u.name]));
 
 export function avatar(role, size = 32) {
-  return `<span class="avatar avatar-${role}" style="--size: ${size}px" aria-hidden="true">${esc(PEOPLE[role][0])}</span>`;
+  const { name, avatar: src } = USERS[role];
+  const img = src ? `<img src="${esc(src)}" alt="${esc(name)}" width="${size}" height="${size}" onerror="this.remove()">` : "";
+  return `<span class="avatar avatar-${role}" style="--size: ${size}px"><span aria-hidden="true">${esc(name[0])}</span>${img}</span>`;
 }
 
 // ===== תאריכים =====

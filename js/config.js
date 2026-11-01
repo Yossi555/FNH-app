@@ -11,5 +11,12 @@ export const FUNCTION_URL = "";
 // הנחה: 0057, כמו הפוסט הראשון בנתוני הדוגמה. יוסי יעדכן לפני המעבר.
 export const START_POST_NUMBER = "0057";
 
+// שם ואווטאר לכל תפקיד (ARCHITECTURE סעיף 7). בלי מיילים, כי הריפו ציבורי.
+// האווטארים הם עותקים של 120 פיקסל מתוך yossi.png ו-sarit.png, כדי שהדף ייטען מהר.
+export const USERS = {
+  owner: { name: "יוסי", avatar: "assets/avatars/yossi-120.png" },
+  user: { name: "שרית", avatar: "assets/avatars/sarit-120.png" },
+};
+
 // ימים עד תאריך היעד של "כתיבת מלל" (PRD, החלטה 6)
 export const DUE_DAYS = 3;

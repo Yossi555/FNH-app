@@ -8,7 +8,7 @@
 
 import { loadDb, resetDb } from "./mock/store.js";
 import { login, logout, getUser } from "./auth.js";
-import { esc, icon, $, $$ } from "./ui.js";
+import { esc, icon, avatar, $, $$ } from "./ui.js";
 import { dashboardScreen } from "./dashboard.js";
 import { tasksScreen } from "./tasks.js";
 import { cycleScreen } from "./posts.js";
@@ -144,7 +144,7 @@ function renderShell(user, { title, back, body, onMount }) {
         <header class="topbar">
           ${backBtn("back-btn")}
           <div class="who">
-            <span class="avatar" aria-hidden="true">${esc(user.name[0])}</span>
+            ${avatar(user.role, 32)}
             <span class="who-name">${esc(user.name)}</span>
             <button class="link-btn small" data-action="logout">יציאה</button>
           </div>

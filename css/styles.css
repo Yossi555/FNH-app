@@ -437,13 +437,17 @@ img { max-width: 100%; display: block; }
 .task-card.is-waiting { background: var(--bg); box-shadow: none; border: 1px dashed var(--muted); color: var(--primary-dark); }
 
 /* ===== אווטאר (DESIGN, חלק 2) ===== */
-/* בלי תמונה: עיגול עם האות הראשונה, ומסגרת של 2 פיקסל בצבע של האדם */
+/* מסגרת של 2 פיקסל בצבע של האדם. בלי תמונה: עיגול עם האות הראשונה */
 .avatar-owner, .avatar-user {
+  position: relative; overflow: hidden;
   width: var(--size, 32px); height: var(--size, 32px); flex: none;
-  font-size: calc(var(--size, 32px) * .45); border: 2px solid var(--primary-dark);
+  font-size: calc(var(--size, 32px) * .45);
 }
-.avatar-owner { background: var(--primary-dark); color: #fff; }
-.avatar-user { background: var(--muted); color: var(--text); }
+.avatar-owner { background: var(--primary-dark); color: #fff; border: 2px solid var(--primary-dark); }
+.avatar-user { background: var(--muted); color: var(--text); border: 2px solid var(--primary-dark); }
+/* עם תמונה: המסגרת של שרית בבז' */
+.avatar-user:has(img) { border-color: var(--muted); }
+.avatar > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 /* ===== לוח בקרה: כרטיסים צפים (DESIGN, מסך 1א ו"כרטיס צף") ===== */
 .title-actions { display: flex; flex-wrap: wrap; gap: 12px; }
