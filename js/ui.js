@@ -45,6 +45,15 @@ export function badge(status, count) {
   return `<span class="badge badge-${status}">${text}</span>`;
 }
 
+// ===== אווטאר =====
+// לפי "אווטאר" ב-DESIGN, חלק 2. עד שהתמונות יחוברו (שלב 2), עיגול עם האות הראשונה.
+
+export const PEOPLE = { owner: "יוסי", user: "שרית" };
+
+export function avatar(role, size = 32) {
+  return `<span class="avatar avatar-${role}" style="--size: ${size}px" aria-hidden="true">${esc(PEOPLE[role][0])}</span>`;
+}
+
 // ===== תאריכים =====
 
 // "14.10", כמו ב-mockups

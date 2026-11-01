@@ -1,6 +1,7 @@
 // נקודת הכניסה: בדיקת סשן, ניתוב בין המסכים לפי הכתובת (#/...), והמעטפת.
 // הכתובות:
 //   #/login          כניסה
+//   #/dashboard      לוח בקרה
 //   #/tasks          המשימות שלי
 //   #/cycle/003      משימה בודדת: רשימת המחזור
 //   #/post/0059      משימה בודדת: פוסט
@@ -8,6 +9,7 @@
 import { loadDb, resetDb } from "./mock/store.js";
 import { login, logout, getUser } from "./auth.js";
 import { esc, icon, $, $$ } from "./ui.js";
+import { dashboardScreen } from "./dashboard.js";
 import { tasksScreen } from "./tasks.js";
 import { cycleScreen } from "./posts.js";
 import { postScreen } from "./texts.js";
@@ -215,9 +217,11 @@ document.addEventListener("click", (e) => {
 });
 
 // ===== המסכים =====
-// "המשימות שלי" ב-tasks.js, רשימת המחזור ב-posts.js, והפוסט ב-texts.js.
+// לוח הבקרה ב-dashboard.js, "המשימות שלי" ב-tasks.js, רשימת המחזור ב-posts.js, והפוסט ב-texts.js.
 
 const SCREENS = {
+  dashboard: (param, user) => dashboardScreen(user),
+
   tasks: (param, user) => tasksScreen(user),
 
   cycle: (param, user) => cycleScreen(param, user),

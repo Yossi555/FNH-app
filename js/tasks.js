@@ -197,7 +197,7 @@ export async function tasksScreen(user) {
 
 // ===== חלון: מחזור חדש =====
 
-function openNewCycle(posts) {
+export function openNewCycle(posts) {
   const suggested = suggestCycle(posts);
   openModal({
     title: "מחזור חדש",
