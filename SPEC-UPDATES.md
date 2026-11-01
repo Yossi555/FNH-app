@@ -98,6 +98,7 @@
 ## ב. תוספות למבנה התיקיות
 
 - **הקובץ `js/dashboard.js`:** מחשב את השלב של כל מחזור ובונה את הכרטיסים הצפים, כמו ב-ARCHITECTURE סעיף 7. הכתובת של לוח הבקרה היא `#/dashboard`.
+- **אייקון האפליקציה, המיקום הסופי (ל-ARCHITECTURE סעיף 7):** כל הקבצים בשורש הריפו. ‏`icon.svg` ו-`favicon-32.png` הם ה-favicon. ‏`apple-touch-icon.png` (180) נוצר מ-`icon-mobile.svg`. ‏`icon-192.png`, `icon-512.png`, `icon-maskable-192.png` ו-`icon-maskable-512.png` נוצרו מ-`icon-mobile.svg` ורשומים ב-`manifest.json`. ‏`icon-apple.svg` נשאר כגיבוי. הפרטים בחלק ב' של העדכון הקודם, למעלה.
 - **הפונקציה `avatar()` ב-`js/ui.js`:** מציירת אווטאר בכל גודל, מתוך `USERS` ב-`js/config.js`.
 - **עותקים קטנים של האווטארים (החלטה של יוסי):** ‏`assets/avatars/yossi-120.png` ו-`sarit-120.png`, בגודל 120 פיקסל וכ-30KB כל אחד. הם נוצרו מ-yossi.png ו-sarit.png, שנשארו בלי שינוי (512 פיקסל, כ-330KB). ב-`USERS` רשומים העותקים הקטנים. כדאי לעדכן את ARCHITECTURE סעיף 7 ואת "אווטאר" ב-DESIGN.
 
