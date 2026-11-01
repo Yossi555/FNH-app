@@ -140,8 +140,16 @@ function statusCell(post) {
   return `<span data-badge="${post.post_number}">${badge(postStatus(post))}</span>`;
 }
 
-function ytText(post) {
-  return post.yt_long_seconds ? `<span dir="ltr">${post.yt_long_seconds}</span>` : "";
+// אורך בדקות ושניות: 120 ← "2:00", 90 ← "1:30"
+export function minutesText(seconds) {
+  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
+}
+
+// הגרסה הארוכה: תגית עם האורך בדקות, או קו כשאין (DESIGN, מסך 3א)
+function longCell(post) {
+  return post.yt_long_seconds
+    ? `<span class="len-tag" dir="ltr">${minutesText(post.yt_long_seconds)}</span><span class="sr-only"> דקות</span>`
+    : `<span aria-hidden="true">—</span><span class="sr-only">אין</span>`;
 }
 
 function renderPosts(posts, isOwner) {
@@ -163,7 +171,7 @@ function renderPosts(posts, isOwner) {
                    aria-label="פוסט ${p.post_number}, ${len} שניות">
           </label>
         </td>`).join("")}
-      <td>${ytText(p)}</td>
+      <td class="ck-cell">${longCell(p)}</td>
       <td class="ck-cell">${imagesCheck(p, isOwner, false)}</td>
       <td>${statusCell(p)}</td>
       <td class="chev-cell">
@@ -181,7 +189,7 @@ function renderPosts(posts, isOwner) {
       <div class="check-row">${lengthChecks(p, isOwner)}</div>
       <div class="check-row">
         ${imagesCheck(p, isOwner, true)}
-        ${p.yt_long_seconds ? `<span class="small muted-text">יוטיוב: ${ytText(p)} שניות</span>` : ""}
+        ${p.yt_long_seconds ? `<span class="small">ארוכה: ${longCell(p)}</span>` : ""}
       </div>
     </li>`).join("");
 
@@ -189,13 +197,19 @@ function renderPosts(posts, isOwner) {
     <div class="tbl-wrap post-table">
     <table class="tbl">
       <caption class="sr-only">הפוסטים במחזור</caption>
-      <thead><tr>
-        ${showFinished ? `<th scope="col" class="ck-cell">גמור</th>` : ""}
-        <th scope="col">מס' פוסט</th><th scope="col">שם הווידאו</th>
-        ${LENGTHS.map((len) => `<th scope="col" class="ck-cell">${len}</th>`).join("")}
-        <th scope="col">יוטיוב (שניות)</th><th scope="col" class="ck-cell">תמונות</th>
-        <th scope="col">סטטוס</th><th scope="col"><span class="sr-only">פתיחה</span></th>
-      </tr></thead>
+      <thead>
+        <tr>
+          ${showFinished ? `<th scope="col" rowspan="2" class="ck-cell">גמור</th>` : ""}
+          <th scope="col" rowspan="2">מס' פוסט</th><th scope="col" rowspan="2">שם הווידאו</th>
+          <th scope="colgroup" colspan="${LENGTHS.length + 1}" class="th-group">גרסאות</th>
+          <th scope="col" rowspan="2" class="ck-cell">תמונות</th>
+          <th scope="col" rowspan="2">סטטוס</th><th scope="col" rowspan="2"><span class="sr-only">פתיחה</span></th>
+        </tr>
+        <tr class="th-sub">
+          ${LENGTHS.map((len) => `<th scope="col" class="ck-cell">${len}</th>`).join("")}
+          <th scope="col" class="ck-cell">ארוכה</th>
+        </tr>
+      </thead>
       <tbody>${rows}</tbody>
     </table>
     </div>
@@ -345,7 +359,7 @@ export function readOwnerFields(form) {
 // ===== חלון: פוסט חדש =====
 
 function openNewPost(cycle) {
-  openModal({
+  const { form } = openModal({
     title: "פוסט חדש",
     primary: "יצירה",
     body: `
@@ -366,6 +380,7 @@ function openNewPost(cycle) {
         <label for="yt-long">אורך יוטיוב (שניות)</label>
         <input class="input" id="yt-long" name="yt_long_seconds" type="number" min="1" step="1"
                inputmode="numeric" dir="ltr" aria-describedby="yt-err">
+        <p class="field-hint" id="yt-min" aria-live="polite"></p>
         <p class="field-error" id="yt-err" role="alert"></p>
       </div>
       <label class="check"><input type="checkbox" name="images_ready"> <span>תמונות מוכנות</span></label>`,
@@ -376,5 +391,14 @@ function openNewPost(cycle) {
       setFlash([{ kind: "ok", html: `הפוסט <b dir="ltr">${post.post_number}</b> נוסף למחזור.` }]);
       rerender();
     },
+  });
+
+  // מתחת לשדה השניות מוצג האורך בדקות, כשיש בו מספר תקין
+  const yt = form.elements.yt_long_seconds;
+  yt.addEventListener("input", () => {
+    const value = Number(yt.value);
+    $("#yt-min", form).innerHTML = Number.isInteger(value) && value > 0
+      ? `<span class="len-tag" dir="ltr">${minutesText(value)}</span> דקות`
+      : "";
   });
 }

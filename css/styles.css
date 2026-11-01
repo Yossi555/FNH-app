@@ -310,6 +310,18 @@ img { max-width: 100%; display: block; }
 .tbl-wrap { position: relative; overflow-x: auto; border-radius: var(--r-card); box-shadow: var(--shadow-card); }
 .tbl-wrap .tbl { box-shadow: none; }
 .tbl .ck-cell { text-align: center; width: 1%; padding-inline: 10px; }
+/* כותרת משותפת "גרסאות" מעל 10, 15, 30, 60 ו"ארוכה" */
+.tbl .th-group { text-align: center; padding-block-end: 6px; }
+.tbl .th-sub th { padding-block-start: 8px; }
+.tbl th[rowspan] { vertical-align: bottom; }
+
+/* תגית אורך לגרסה הארוכה: גלולה קטנה, למשל 2:00 (DESIGN, חלק 2) */
+.len-tag {
+  display: inline-block; padding: 2px 10px; border-radius: var(--r-pill);
+  background: var(--muted); color: var(--text); font-size: 14px; font-weight: 700; line-height: 1.5;
+}
+.field-hint { margin-block-start: 6px; font-size: 14px; color: var(--text); }
+.field-hint:empty { display: none; }
 .tbl .ck-cell .check { justify-content: center; }
 .flash-area { display: grid; gap: 12px; margin-block-end: var(--s2); }
 .flash-area:empty { display: none; }
