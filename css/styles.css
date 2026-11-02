@@ -357,6 +357,10 @@ img { max-width: 100%; display: block; }
 .form-actions { display: flex; justify-content: flex-end; }
 
 .tabs { display: flex; gap: 4px; overflow-x: auto; border-block-end: 1px solid var(--muted); margin-block: var(--s2); }
+/* הלשוניות נגללות לרוחב בלי פס גלילה נראה ובלי חיצי הגלילה של הדפדפן.
+   הגלילה עצמה ממשיכה לעבוד באצבע, בגלגלת ובמקלדת */
+.tabs { scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
 .tab {
   flex: none; background: none; border: none; cursor: pointer;
   font: 700 15px var(--font-ui); color: var(--primary-dark);
@@ -457,17 +461,25 @@ img { max-width: 100%; display: block; }
 .task-card.is-waiting { background: var(--bg); box-shadow: none; border: 1px dashed var(--muted); color: var(--primary-dark); }
 
 /* ===== אווטאר (DESIGN, חלק 2) ===== */
-/* מסגרת של 2 פיקסל בצבע של האדם. בלי תמונה: עיגול עם האות הראשונה */
+/* טבעת שקועה במקום מסגרת: מדרג אנכי מחום כהה לבז', ומעל התמונה צל פנימי.
+   עובי הטבעת (--ring) נקבע ב-avatar() ב-ui.js. בלי תמונה: עיגול עם האות הראשונה */
 .avatar-owner, .avatar-user {
   position: relative; overflow: hidden;
   width: var(--size, 32px); height: var(--size, 32px); flex: none;
   font-size: calc(var(--size, 32px) * .45);
+  background: linear-gradient(#5A3E30, #E6D6C0);
 }
-.avatar-owner { background: var(--primary-dark); color: #fff; border: 2px solid var(--primary-dark); }
-.avatar-user { background: var(--muted); color: var(--text); border: 2px solid var(--primary-dark); }
-/* עם תמונה: המסגרת של שרית בבז' */
-.avatar-user:has(img) { border-color: var(--muted); }
-.avatar > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.avatar > span, .avatar > img, .avatar-owner::after, .avatar-user::after {
+  position: absolute; inset: var(--ring, 2px); border-radius: 50%;
+}
+.avatar > span { display: flex; align-items: center; justify-content: center; }
+.avatar-owner > span { background: var(--primary-dark); color: #fff; }
+.avatar-user > span { background: var(--muted); color: var(--text); }
+.avatar > img { width: calc(100% - 2 * var(--ring, 2px)); height: calc(100% - 2 * var(--ring, 2px)); object-fit: cover; }
+.avatar-owner::after, .avatar-user::after {
+  content: ""; pointer-events: none;
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, .45), inset 0 -2px 2px rgba(255, 247, 236, .35);
+}
 
 /* ===== לוח בקרה: כרטיסים צפים (DESIGN, מסך 1א ו"כרטיס צף") ===== */
 .title-actions { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -475,13 +487,17 @@ img { max-width: 100%; display: block; }
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s4);
   max-width: 1120px; perspective: 900px; padding-block: var(--s1) var(--s3);
 }
+/* הפרספקטיבה חלה רק על הילדים הישירים (li). בלי preserve-3d היא לא מגיעה לכרטיס שבתוכם,
+   וההטיה וה-translateZ נראים שטוחים */
+.float-grid > li { transform-style: preserve-3d; }
 .float-card {
   --rx: 10deg; --ry: -8deg; --tz: 0px;
-  display: grid; gap: 10px; height: 100%;
+  display: grid; gap: 12px; height: 100%; align-content: start;
   background: var(--surface); border-radius: var(--r-card); padding: var(--s2);
   color: var(--text); text-decoration: none;
-  /* עובי: שלוש שכבות בגוונים כהים יותר של המשטח המושתק, ומתחתן צל הציפה */
-  box-shadow: 0 2px 0 #E7D2BD, 0 4px 0 #DCC3AA, 0 6px 0 #D2B79C, 0 14px 22px rgba(108, 85, 70, .28);
+  /* עובי: שש שכבות בגוונים כהים יותר מהנייר, ומתחתן צל הציפה */
+  box-shadow: 0 1px 0 #CDBCA8, 0 2px 0 #C4B29D, 0 3px 0 #BBA893, 0 4px 0 #B39F89, 0 5px 0 #AB967F, 0 6px 0 #A38D76,
+    0 14px 22px rgba(108, 85, 70, .3);
   transform: rotateX(var(--rx)) rotateY(var(--ry)) translateZ(var(--tz));
   transition: transform 250ms ease, box-shadow 250ms ease;
 }
@@ -491,37 +507,40 @@ img { max-width: 100%; display: block; }
 /* לחיצה (בעיקר בטלפון): הכרטיס נלחץ פנימה לרגע */
 .float-card:active {
   --tz: -6px;
-  box-shadow: 0 1px 0 #E7D2BD, 0 2px 0 #DCC3AA, 0 8px 14px rgba(108, 85, 70, .24);
+  box-shadow: 0 1px 0 #CDBCA8, 0 2px 0 #BBA893, 0 3px 0 #A38D76, 0 8px 14px rgba(108, 85, 70, .24);
 }
 
 .fc-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.fc-num { font: 700 32px/1 var(--font-head); color: var(--text-head); }
-.fc-stage { font-weight: 700; color: var(--text-head); }
-.fc-line, .fc-due { font-size: 14px; }
-.fc-due { color: var(--primary-dark); }
+/* הנחה: Extra Bold (800) לא קיים בקובצי הגופן, ולכן הדפדפן מציג את 700 */
+.fc-num { font: 800 48px/1 var(--font-head); color: var(--text-head); }
+.fc-stage { font-size: 22px; font-weight: 700; color: var(--text-head); line-height: 1.3; }
+.fc-line { font-size: 20px; color: var(--text-head); }
+.fc-due { font-size: 18px; color: var(--text-head); }
 .fc-done {
-  width: 40px; height: 40px; border-radius: 50%; flex: none;
+  width: 80px; height: 80px; border-radius: 50%; flex: none;
   display: inline-flex; align-items: center; justify-content: center;
-  background: var(--bg); border: 2px solid var(--muted); color: var(--finished); font-weight: 700;
+  background: var(--bg); border: 3px solid var(--muted); color: var(--finished); font-size: 36px; font-weight: 700;
 }
 
-/* פס התקדמות כמו מגירה: המסילה שקועה, והמילוי מורם */
-.fc-bar {
-  display: block; height: 10px; border-radius: var(--r-pill);
-  background: var(--muted); box-shadow: inset 0 2px 3px rgba(108, 85, 70, .35);
+/* פס בשלושה מקטעים, מקטע לכל שלב. כמו מגירה: המסילה שקועה, והמילוי מורם ומתחיל מימין */
+.fc-bar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+.fc-seg {
+  display: block; height: 12px; border-radius: var(--r-pill); overflow: hidden;
+  background: rgba(108, 85, 70, .18); box-shadow: inset 0 2px 3px rgba(0, 0, 0, .18);
 }
-.fc-bar > span {
+.fc-seg > span {
   display: block; height: 100%; border-radius: inherit;
   box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .22), 0 1px 2px rgba(46, 36, 30, .3);
 }
-.stage-edit .fc-bar > span { background: var(--primary); }
-.stage-text .fc-bar > span { background: var(--success); }
-.stage-complete .fc-bar > span { background: var(--finished); }
-/* מחזור שהושלם: הכרטיס שקוף ב-60%.
-   הנחה: השקיפות חלה על הרקע והעובי בלבד, והטקסט נשאר בצבע מלא, כדי לשמור על ניגודיות */
+/* צבעי השלבים (DESIGN, "צבעי השלבים בלוח הבקרה"): רק כאן, ולא בשום מקום אחר */
+.seg-edit > span { background: #E48F10; }
+.seg-text > span { background: #3B8AC2; }
+.seg-complete > span { background: #489834; }
+/* מחזור שהושלם: הרקע והעובי שקופים ב-60%. הטקסט והפס בצבע מלא, כדי לשמור על ניגודיות */
 .float-card.stage-done {
-  background: rgba(243, 230, 215, .6);
-  box-shadow: 0 2px 0 rgba(231, 210, 189, .6), 0 4px 0 rgba(220, 195, 170, .6), 0 6px 0 rgba(210, 183, 156, .6), 0 14px 22px rgba(108, 85, 70, .17);
+  box-shadow: 0 1px 0 rgba(205, 188, 168, .6), 0 2px 0 rgba(196, 178, 157, .6), 0 3px 0 rgba(187, 168, 147, .6),
+    0 4px 0 rgba(179, 159, 137, .6), 0 5px 0 rgba(171, 150, 127, .6), 0 6px 0 rgba(163, 141, 118, .6),
+    0 14px 22px rgba(108, 85, 70, .18);
 }
 
 /* "הפחתת תנועה": הכרטיסים שטוחים ובלי תנועה. העובי והצל נשארים */
@@ -537,16 +556,19 @@ img { max-width: 100%; display: block; }
 
 /* ===== רקע תמונה (DESIGN, חלק 2) ===== */
 /* שכבה קבועה עם position: fixed, ולא background-attachment: fixed, שלא עובד טוב באייפון.
-   הדפדפן בוחר קובץ לפי רוחב המסך. מעל התמונה שכבת קרם: 30% בכניסה, 75% בלוח הבקרה וב"המשימות שלי" */
+   הדפדפן בוחר קובץ לפי רוחב המסך. מעל התמונה שכבת קרם: 30% בכניסה, 60% בלוח הבקרה וב"המשימות שלי" */
 .bg-photo {
   display: none; position: fixed; inset: 0; z-index: -1;
   background: url(../assets/backgrounds/workshop-960.webp) 70% 50% / cover no-repeat;
 }
-.bg-photo::after { content: ""; position: absolute; inset: 0; background: rgba(255, 247, 236, .75); }
+.bg-photo::after { content: ""; position: absolute; inset: 0; background: rgba(255, 247, 236, .6); }
 body[data-bg] .bg-photo { display: block; }
 body[data-bg="login"] .bg-photo::after { background: rgba(255, 247, 236, .3); }
-/* קישורי טקסט שיושבים ישירות על התמונה ("יציאה", "רענון"): צבע הכותרות, כי #6C5546 מגיע שם רק ל-3.6 */
-body[data-bg] .link-btn { color: var(--text-head); }
+/* טקסט קטן שיושב ישירות על התמונה (השם, "יציאה", "רענון"): צבע הטקסט הרגיל, כ-5.2.
+   מתחת לשכבה של 60% גם צבע הכותרות מגיע רק ל-3.3 */
+body[data-bg] .topbar .who-name,
+body[data-bg] .content .link-btn,
+body[data-bg] .topbar .link-btn { color: var(--text); }
 @media (min-width: 961px) { .bg-photo { background-image: url(../assets/backgrounds/workshop-1280.webp); } }
 @media (min-width: 1281px) { .bg-photo { background-image: url(../assets/backgrounds/workshop-1920.webp); } }
 .login-logo { width: min(260px, 70vw); }
@@ -567,6 +589,48 @@ body[data-bg] .link-btn { color: var(--text-head); }
 .choice:has(input:checked) { background: var(--surface); border: 2px solid var(--primary); }
 .choice:has(input:focus-visible) { outline: 3px solid var(--primary-dark); outline-offset: 2px; }
 .choice .icon { color: var(--primary-dark); }
+
+/* ===== מרקם נייר (DESIGN, חלק 2, "מרקם נייר") ===== */
+/* אריח של 512 שמוצג ב-256, לחדות ברטינה. צבע הבסיס של כל משטח נשאר מתחת, למקרה שהקובץ לא נטען.
+   כפתורים, תגיות ורקע הדף בלי מרקם */
+:root {
+  --tex-surface: url(../assets/textures/paper-surface.webp);
+  --tex-field: url(../assets/textures/paper-field.webp);
+  /* גוון שקוף למעבר עכבר, כדי שהמרקם יישאר גלוי מתחתיו */
+  --tex-hover: linear-gradient(rgba(108, 85, 70, .12), rgba(108, 85, 70, .12));
+}
+.card:not(.ai-loading), .tbl, .modal, .login-card, .sidebar, .menu, .empty-state, .float-card {
+  background-image: var(--tex-surface); background-size: 256px;
+}
+.input, .select, .textarea, .hl-wrap {
+  background-image: var(--tex-field); background-size: 256px;
+}
+/* שדה לקריאה בלבד (למשל "שם הווידאו" אצל שרית): טקסט מלא בלי שקיפות, בלי מסגרת,
+   ומרקם המשטח במקום מרקם השדה. הסמן לא משתנה למצב כתיבה.
+   -webkit-text-fill-color: ספארי מבהיר טקסט של שדה מושבת גם כשהצבע מוגדר */
+.input:disabled, .select:disabled, .textarea:disabled,
+.input[readonly], .textarea[readonly], .text-box {
+  color: var(--text); opacity: 1;
+  border-color: transparent; cursor: default;
+  background-color: var(--surface); background-image: var(--tex-surface); background-size: 256px;
+}
+.input:disabled, .select:disabled, .textarea:disabled { -webkit-text-fill-color: var(--text); }
+.row-link:hover, .task-card:hover:not(.is-waiting) {
+  background-image: var(--tex-hover), var(--tex-surface); background-size: auto, 256px;
+}
+/* שורה בטבלה: גוון שקוף, כדי שהמרקם של הטבלה ייראה דרכו */
+.tbl tr[data-href]:hover td { background: rgba(108, 85, 70, .12); }
+/* מחזור שהושלם: המרקם והעובי שקופים ב-60%, והטקסט והפס בצבע מלא */
+.float-card.stage-done { position: relative; isolation: isolate; background: none; }
+.float-card.stage-done::before {
+  content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+  background: var(--surface) var(--tex-surface) 0 0 / 256px; opacity: .6;
+}
+
+/* טקסט משני קטן על המרקם: #6C5546 מגיע שם רק ל-3.69, ולכן #5A3E30 (5.16) */
+.card .muted-text, .modal .muted-text, .text-empty, .link-ok,
+.modal .link-btn, .sidebar .link-btn, .proto-box, .proto-toggle,
+.menu .small, .menu-user, .empty-state, .post-card-end { color: var(--text-head); }
 
 /* ===== טלפון ===== */
 /* מסך מחשב קטן: כותרות הטבלה נשברות לשתי שורות, ופחות ריווח בתאים */
@@ -614,6 +678,8 @@ body[data-bg] .link-btn { color: var(--text-head); }
   .title-actions { width: 100%; flex-direction: column-reverse; }
   .title-actions .btn { width: 100%; }
   .float-grid { grid-template-columns: 1fr; gap: var(--s3); }
+  /* בטלפון הכרטיסים ישרים, גם במנוחה. העובי, הצל והלחיצה פנימה נשארים */
+  .float-card, .float-card:hover, .float-card:focus-visible { --rx: 0deg; --ry: 0deg; --tz: 0px; }
   .task-table { display: none; }
   .task-cards { display: grid; }
   .post-table { display: none; }

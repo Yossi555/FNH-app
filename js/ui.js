@@ -77,7 +77,9 @@ export const PEOPLE = Object.fromEntries(Object.entries(USERS).map(([role, u]) =
 export function avatar(role, size = 32) {
   const { name, avatar: src } = USERS[role];
   const img = src ? `<img src="${esc(src)}" alt="${esc(name)}" width="${size}" height="${size}" onerror="this.remove()">` : "";
-  return `<span class="avatar avatar-${role}" style="--size: ${size}px"><span aria-hidden="true">${esc(name[0])}</span>${img}</span>`;
+  // טבעת שקועה: 3 פיקסלים, ובגודל 32 ומטה 2 פיקסלים (הנחה ב-DESIGN)
+  const ring = size > 32 ? 3 : 2;
+  return `<span class="avatar avatar-${role}" style="--size: ${size}px; --ring: ${ring}px"><span aria-hidden="true">${esc(name[0])}</span>${img}</span>`;
 }
 
 // ===== תאריכים =====

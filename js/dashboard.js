@@ -55,10 +55,23 @@ function stageText(c) {
   return c.who ? `${PEOPLE[c.who]} – ${STAGE_LABELS[c.stage]}` : STAGE_LABELS[c.stage];
 }
 
-function cardHtml(c) {
+// פס בשלושה מקטעים, מקטע לכל שלב (ARCHITECTURE סעיף 5): שלב שעבר מלא, השלב הנוכחי לפי ההתקדמות,
+// ושלב עתידי ריק. במחזור שהושלם שלושתם מלאים
+const BAR_STAGES = ["edit", "text", "complete"];
+
+function barHtml(c) {
+  const current = c.stage === "done" ? BAR_STAGES.length : BAR_STAGES.indexOf(c.stage);
   const pct = c.total ? Math.round((c.done / c.total) * 100) : 0;
+  const segs = BAR_STAGES.map((stage, i) => {
+    const fill = i < current ? 100 : i === current ? pct : 0;
+    return `<span class="fc-seg seg-${stage}"><span style="inline-size: ${fill}%"></span></span>`;
+  });
+  return `<span class="fc-bar" aria-hidden="true">${segs.join("")}</span>`;
+}
+
+function cardHtml(c) {
   // הנחה: במחזור שהושלם אין אצל מי, ולכן במקום האווטאר מוצג סימן ✓
-  const who = c.who ? avatar(c.who, 40) : `<span class="fc-done" aria-hidden="true">✓</span>`;
+  const who = c.who ? avatar(c.who, 80) : `<span class="fc-done" aria-hidden="true">✓</span>`;
   return `
     <li>
       <a class="float-card stage-${c.stage}" href="#/cycle/${c.cycle}">
@@ -68,14 +81,16 @@ function cardHtml(c) {
         </span>
         <span class="fc-stage">${stageText(c)}</span>
         <span class="fc-line">${c.line}</span>
-        ${c.stage === "done" ? "" : `<span class="fc-bar" aria-hidden="true"><span style="inline-size: ${pct}%"></span></span>`}
+        ${barHtml(c)}
         ${c.due ? `<span class="fc-due">יעד ${shortDate(c.due)}</span>` : ""}
       </a>
     </li>`;
 }
 
-// הטיה לכיוון העכבר: עד 11 מעלות בכל ציר. רק בעכבר, ולא כשהמשתמש ביקש "הפחתת תנועה"
+// הטיה לכיוון העכבר: עד 11 מעלות בכל ציר. רק בעכבר, ולא כשהמשתמש ביקש "הפחתת תנועה".
+// ברוחב של טלפון הכרטיסים ישרים, גם כשיש עכבר
 const MAX_TILT = 11;
+const PHONE = matchMedia("(max-width: 767px)");
 
 function bindTilt() {
   if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
@@ -83,6 +98,7 @@ function bindTilt() {
 
   $$(".float-card").forEach((card) => {
     card.addEventListener("pointermove", (e) => {
+      if (PHONE.matches) return;
       const r = card.getBoundingClientRect();
       const x = (e.clientX - r.left) / r.width - 0.5;
       const y = (e.clientY - r.top) / r.height - 0.5;
