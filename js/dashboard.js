@@ -87,31 +87,6 @@ function cardHtml(c) {
     </li>`;
 }
 
-// הטיה לכיוון העכבר: עד 11 מעלות בכל ציר. רק בעכבר, ולא כשהמשתמש ביקש "הפחתת תנועה".
-// ברוחב של טלפון הכרטיסים ישרים, גם כשיש עכבר
-const MAX_TILT = 11;
-const PHONE = matchMedia("(max-width: 767px)");
-
-function bindTilt() {
-  if (!matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-  $$(".float-card").forEach((card) => {
-    card.addEventListener("pointermove", (e) => {
-      if (PHONE.matches) return;
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - 0.5;
-      const y = (e.clientY - r.top) / r.height - 0.5;
-      card.style.setProperty("--ry", `${(x * 2 * MAX_TILT).toFixed(1)}deg`);
-      card.style.setProperty("--rx", `${(-y * 2 * MAX_TILT).toFixed(1)}deg`);
-    });
-    card.addEventListener("pointerleave", () => {
-      card.style.removeProperty("--rx");
-      card.style.removeProperty("--ry");
-    });
-  });
-}
-
 export async function dashboardScreen(user) {
   const posts = await listPosts();
   const cycles = computeCycles(posts);
@@ -131,7 +106,6 @@ export async function dashboardScreen(user) {
       : `<p class="empty-state">עוד אין מחזורים. כשיוסי יפתח מחזור, הוא יופיע כאן.</p>`}`;
 
   function onMount() {
-    bindTilt();
     $$("#new-cycle").forEach((b) => b.addEventListener("click", () => openNewCycle(posts)));
   }
 

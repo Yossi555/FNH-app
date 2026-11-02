@@ -485,28 +485,22 @@ img { max-width: 100%; display: block; }
 .title-actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .float-grid {
   display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s4);
-  max-width: 1120px; perspective: 900px; padding-block: var(--s1) var(--s3);
+  max-width: 1120px; padding-block: var(--s1) var(--s3);
 }
-/* הפרספקטיבה חלה רק על הילדים הישירים (li). בלי preserve-3d היא לא מגיעה לכרטיס שבתוכם,
-   וההטיה וה-translateZ נראים שטוחים */
-.float-grid > li { transform-style: preserve-3d; }
+/* החלטה של יוסי (2.11.2026): הכרטיסים ישרים בכל המכשירים, בלי הטיה ובלי תנועה במעבר עכבר,
+   כי האנימציה לא הייתה חלקה ואחידה. העובי, הצל והלחיצה פנימה נשארים, כמו בטלפון */
 .float-card {
-  --rx: 10deg; --ry: -8deg; --tz: 0px;
   display: grid; gap: 12px; height: 100%; align-content: start;
   background: var(--surface); border-radius: var(--r-card); padding: var(--s2);
   color: var(--text); text-decoration: none;
   /* עובי: שש שכבות בגוונים כהים יותר מהנייר, ומתחתן צל הציפה */
   box-shadow: 0 1px 0 #CDBCA8, 0 2px 0 #C4B29D, 0 3px 0 #BBA893, 0 4px 0 #B39F89, 0 5px 0 #AB967F, 0 6px 0 #A38D76,
     0 14px 22px rgba(108, 85, 70, .3);
-  transform: rotateX(var(--rx)) rotateY(var(--ry)) translateZ(var(--tz));
-  transition: transform 250ms ease, box-shadow 250ms ease;
 }
-.float-card:hover { --tz: 14px; }
-/* פוקוס מהמקלדת: הכרטיס מתיישר ומתרומם, עם מסגרת פוקוס נראית */
-.float-card:focus-visible { --rx: 0deg; --ry: 0deg; --tz: 14px; outline: 3px solid var(--primary-dark); outline-offset: 4px; }
-/* לחיצה (בעיקר בטלפון): הכרטיס נלחץ פנימה לרגע */
+.float-card:focus-visible { outline: 3px solid var(--primary-dark); outline-offset: 4px; }
+/* לחיצה: הכרטיס יורד מעט והעובי קטן, עד שמשחררים */
 .float-card:active {
-  --tz: -6px;
+  transform: translateY(3px);
   box-shadow: 0 1px 0 #CDBCA8, 0 2px 0 #BBA893, 0 3px 0 #A38D76, 0 8px 14px rgba(108, 85, 70, .24);
 }
 
@@ -543,9 +537,9 @@ img { max-width: 100%; display: block; }
     0 14px 22px rgba(108, 85, 70, .18);
 }
 
-/* "הפחתת תנועה": הכרטיסים שטוחים ובלי תנועה. העובי והצל נשארים */
+/* "הפחתת תנועה": גם הלחיצה בלי תזוזה. העובי והצל נשארים */
 @media (prefers-reduced-motion: reduce) {
-  .float-card, .float-card:hover, .float-card:focus-visible, .float-card:active { transform: none; transition: none; }
+  .float-card:active { transform: none; }
 }
 
 /* ===== מסך הכניסה ===== */
@@ -678,8 +672,6 @@ body[data-bg] .topbar .link-btn { color: var(--text); }
   .title-actions { width: 100%; flex-direction: column-reverse; }
   .title-actions .btn { width: 100%; }
   .float-grid { grid-template-columns: 1fr; gap: var(--s3); }
-  /* בטלפון הכרטיסים ישרים, גם במנוחה. העובי, הצל והלחיצה פנימה נשארים */
-  .float-card, .float-card:hover, .float-card:focus-visible { --rx: 0deg; --ry: 0deg; --tz: 0px; }
   .task-table { display: none; }
   .task-cards { display: grid; }
   .post-table { display: none; }
