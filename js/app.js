@@ -65,7 +65,7 @@ function renderLogin() {
   setBackground("login");
   app.innerHTML = `
     <main class="login">
-      <img class="login-logo" src="assets/logo.png" alt="Fun N' Handy – Do what you love">
+      <img class="login-logo" src="assets/logo.png" alt="Fun N' Handy - Do what you love">
       <form class="login-card" id="login-form" novalidate>
         <h1 class="login-title">ברוכים הבאים</h1>
         <fieldset class="choices">
@@ -152,7 +152,7 @@ function renderShell(user, { title, back, body, onMount }) {
     <a class="skip-link" href="#main">דילוג לתוכן</a>
     <div class="app">
       <aside class="sidebar" aria-label="תפריט ראשי">
-        <a class="brand" href="#/dashboard"><img src="assets/logo.png" alt="Fun N' Handy – לוח בקרה"></a>
+        <a class="brand" href="#/dashboard"><img src="assets/logo.png" alt="Fun N' Handy - לוח בקרה"></a>
         <nav class="nav">${navLinks()}</nav>
         <div class="proto-box">
           <p class="small">כלים לאב הטיפוס</p>

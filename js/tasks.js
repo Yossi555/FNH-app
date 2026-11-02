@@ -4,15 +4,18 @@
 import { DUE_DAYS } from "./config.js";
 import { listPosts, postStatus, suggestCycle } from "./posts.js";
 import { esc, icon, badge, shortDate, openModal, rerender, PEOPLE, STATUS_LABELS, $, $$ } from "./ui.js";
+import { stageDot } from "./dashboard.js";
 
-// כל משימה מנוסחת "מי – שלב" (ARCHITECTURE סעיף 5, עודכן ב-1.11.2026).
+// כל משימה מנוסחת "מי - שלב" (ARCHITECTURE סעיף 5, עודכן ב-1.11.2026).
 // "wait" היא השורה האפורה אצל יוסי, כשהמחזור אצל שרית. קודם היא נקראה "ממתין לשרית"
 const TASK_LABELS = {
-  edit: `${PEOPLE.owner} – עריכה והזנה`,
-  text: `${PEOPLE.user} – כתיבת מלל`,
-  complete: `${PEOPLE.owner} – השלמת גרסאות`,
-  wait: `${PEOPLE.user} – כתיבת מלל`,
+  edit: `${PEOPLE.owner} - עריכה והזנה`,
+  text: `${PEOPLE.user} - כתיבת מלל`,
+  complete: `${PEOPLE.owner} - השלמת גרסאות`,
+  wait: `${PEOPLE.user} - כתיבת מלל`,
 };
+// צבע הנקודה לפי המשימה שבשורה (ARCHITECTURE סעיף 5): השורה האפורה אצל יוסי היא כתיבת מלל, ולכן כחולה
+const TASK_STAGES = { edit: "edit", text: "text", complete: "complete", wait: "text" };
 const STATUS_ORDER = ["empty", "draft", "approved", "finished"];
 
 // ===== חישוב =====
@@ -48,7 +51,7 @@ export function computeTasks(posts, role) {
         tasks.push({ ...base, type: "complete", due: null });
       }
       // החלטה של יוסי (31.10), תוספת לטבלה ב-ARCHITECTURE סעיף 5: מחזור ששרית כותבת בו
-      // מופיע ליוסי כשורה אפורה "שרית – כתיבת מלל", בלי התראה ובלי תאריך יעד, כדי שיוכל להגיע אליו
+      // מופיע ליוסי כשורה אפורה "שרית - כתיבת מלל", בלי התראה ובלי תאריך יעד, כדי שיוכל להגיע אליו
       if (tasks.length === before && cyclePosts.some((p) => p.editing_done && !p.text_done)) {
         tasks.push({ ...base, type: "wait", due: null });
       }
@@ -113,7 +116,7 @@ function renderList(tasks) {
   const rows = shown.map((t) => `
     <tr data-href="#/cycle/${t.cycle}" ${t.type === "wait" ? 'class="is-waiting"' : ""}>
       <td class="num" dir="ltr">${t.cycle}</td>
-      <td>${TASK_LABELS[t.type]}</td>
+      <td>${stageDot(TASK_STAGES[t.type])}${TASK_LABELS[t.type]}</td>
       <td>${statusBadges(t.counts)}</td>
       <td>${dueText(t)}</td>
       <td class="chev-cell">
@@ -125,7 +128,7 @@ function renderList(tasks) {
     <li>
       <a class="card task-card ${t.type === "wait" ? "is-waiting" : ""}" href="#/cycle/${t.cycle}">
         <span class="task-card-body">
-          <b>מחזור <span dir="ltr">${t.cycle}</span> · ${TASK_LABELS[t.type]}</b>
+          <b>מחזור <span dir="ltr">${t.cycle}</span> · ${stageDot(TASK_STAGES[t.type])}${TASK_LABELS[t.type]}</b>
           ${t.due ? `<span class="small muted-text">תאריך יעד: ${dueText(t)}</span>` : ""}
           ${statusBadges(t.counts)}
         </span>

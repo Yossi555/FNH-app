@@ -1,4 +1,4 @@
-/* FNH Pipeline – עיצוב לפי DESIGN.md, חלק 2 (Style Guide).
+/* FNH Pipeline - עיצוב לפי DESIGN.md, חלק 2 (Style Guide).
    הכל מימין לשמאל, עם מאפיינים לוגיים בלבד (inline-start / inline-end). */
 
 /* ===== גופנים (קבצים מקומיים מתוך assets/fonts) ===== */
@@ -455,7 +455,7 @@ img { max-width: 100%; display: block; }
 .task-card:hover { background: var(--muted); }
 .task-card-body { display: grid; gap: 6px; }
 .task-card > .icon { color: var(--primary-dark); }
-/* "שרית – כתיבת מלל" אצל יוסי: שורה אפורה, כי אין בה פעולה ליוסי */
+/* "שרית - כתיבת מלל" אצל יוסי: שורה אפורה, כי אין בה פעולה ליוסי */
 .tbl tr.is-waiting td { background: var(--bg); color: var(--primary-dark); }
 .tbl tr.is-waiting .num { color: var(--primary-dark); }
 .task-card.is-waiting { background: var(--bg); box-shadow: none; border: 1px dashed var(--muted); color: var(--primary-dark); }
@@ -526,10 +526,22 @@ img { max-width: 100%; display: block; }
   display: block; height: 100%; border-radius: inherit;
   box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .22), 0 1px 2px rgba(46, 36, 30, .3);
 }
-/* צבעי השלבים (DESIGN, "צבעי השלבים בלוח הבקרה"): רק כאן, ולא בשום מקום אחר */
-.seg-edit > span { background: #E48F10; }
-.seg-text > span { background: #3B8AC2; }
-.seg-complete > span { background: #489834; }
+/* צבעי השלבים (DESIGN, "צבעי השלבים בלוח הבקרה"): רק בפס, בנקודה ב"המשימות שלי" ובפס השלב ברשימת המחזור */
+.seg-edit > span, .dot-edit { background: #E48F10; }
+.seg-text > span, .dot-text { background: #3B8AC2; }
+.seg-complete > span, .dot-complete { background: #489834; }
+/* פס השלב ברשימת המחזור: אותו פס, קטן יותר, ולידו השלב בטקסט */
+.cycle-stage {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 6px 12px;
+  margin-block: calc(var(--s3) * -0.5) var(--s3); color: var(--text-head);
+}
+.cycle-stage:empty { display: none; }
+.fc-bar.bar-small { inline-size: 240px; max-inline-size: 100%; }
+.bar-small .fc-seg { height: 8px; }
+.stage-dot {
+  display: inline-block; width: 10px; height: 10px; border-radius: 50%; flex: none;
+  margin-inline-end: 8px; vertical-align: middle;
+}
 /* מחזור שהושלם: הרקע והעובי שקופים ב-60%. הטקסט והפס בצבע מלא, כדי לשמור על ניגודיות */
 .float-card.stage-done {
   box-shadow: 0 1px 0 rgba(205, 188, 168, .6), 0 2px 0 rgba(196, 178, 157, .6), 0 3px 0 rgba(187, 168, 147, .6),
@@ -601,14 +613,20 @@ body[data-bg] .topbar .link-btn { color: var(--text); }
 }
 /* שדה לקריאה בלבד (למשל "שם הווידאו" אצל שרית): טקסט מלא בלי שקיפות, בלי מסגרת,
    ומרקם המשטח במקום מרקם השדה. הסמן לא משתנה למצב כתיבה.
+   מתחתיו קו תחתון דק, כדי שלא יתמזג עם הכרטיס. הפינות התחתונות ישרות, כדי שהקו יהיה ישר.
    -webkit-text-fill-color: ספארי מבהיר טקסט של שדה מושבת גם כשהצבע מוגדר */
 .input:disabled, .select:disabled, .textarea:disabled,
 .input[readonly], .textarea[readonly], .text-box {
   color: var(--text); opacity: 1;
-  border-color: transparent; cursor: default;
+  border-color: transparent; border-block-end-color: #B39F89; cursor: default;
+  border-end-start-radius: 0; border-end-end-radius: 0;
   background-color: var(--surface); background-image: var(--tex-surface); background-size: 256px;
 }
 .input:disabled, .select:disabled, .textarea:disabled { -webkit-text-fill-color: var(--text); }
+/* שדה ריק לקריאה בלבד מציג קו "—" (placeholder בקוד) */
+.input:disabled::placeholder, .textarea:disabled::placeholder {
+  color: var(--text-head); -webkit-text-fill-color: var(--text-head); opacity: 1;
+}
 .row-link:hover, .task-card:hover:not(.is-waiting) {
   background-image: var(--tex-hover), var(--tex-surface); background-size: auto, 256px;
 }

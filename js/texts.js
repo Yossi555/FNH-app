@@ -1,6 +1,6 @@
 // שורות המלל של פוסט, והמסך "משימה בודדת: פוסט".
 // יוסי: עדכון גרסאות, צפייה במלל והעתקה.
-// שרית: הנחיה, דף נחיתה, הפעלת המודל, עריכה, "נסה שוב" ואישור (ARCHITECTURE סעיף 5, אוטומציות 3–6).
+// שרית: הנחיה, דף נחיתה, הפעלת המודל, עריכה, "נסה שוב" ואישור (ARCHITECTURE סעיף 5, אוטומציות 3-6).
 
 import { getDb, saveDb } from "./mock/store.js";
 import { getPost, listCycle, postStatus, updatePost, readOwnerFields, LENGTHS } from "./posts.js";
@@ -147,7 +147,7 @@ function fieldsOf(row, network, post) {
     for (const field of network.version_fields) {
       items.push({
         version, field,
-        label: `${FIELD_LABELS[field]} – ${versionLabel(version, post)}`,
+        label: `${FIELD_LABELS[field]} - ${versionLabel(version, post)}`,
         value: readValue(row, version, field),
       });
     }
@@ -185,6 +185,8 @@ function navArrows(siblings, index) {
 
 function detailsCard(post, isOwner, links, canRun) {
   const dis = isOwner ? "" : "disabled";
+  // שדה ריק לקריאה בלבד מציג קו "—" (DESIGN, "שדה קלט")
+  const dash = isOwner ? "" : 'placeholder="—"';
   const landing = links.find((l) => l.id === post.landing_page);
 
   const landingField = isOwner
@@ -230,7 +232,7 @@ function detailsCard(post, isOwner, links, canRun) {
         <div class="field" id="yt-field">
           <label for="yt-long">אורך יוטיוב (שניות)</label>
           <input class="input" id="yt-long" name="yt_long_seconds" type="number" min="1" step="1" inputmode="numeric"
-                 dir="ltr" value="${post.yt_long_seconds ?? ""}" aria-describedby="yt-err" ${dis}>
+                 dir="ltr" value="${post.yt_long_seconds ?? ""}" aria-describedby="yt-err" ${dis} ${dash}>
           <p class="field-error" id="yt-err" role="alert"></p>
         </div>
         <div class="field">
@@ -240,7 +242,7 @@ function detailsCard(post, isOwner, links, canRun) {
         <div class="field" id="name-field">
           <label for="video-name">שם הווידאו</label>
           <input class="input" id="video-name" name="video_name" dir="ltr" lang="en" autocomplete="off"
-                 value="${esc(post.video_name)}" aria-describedby="name-err" ${dis}>
+                 value="${esc(post.video_name)}" aria-describedby="name-err" ${dis} ${dash}>
           <p class="field-error" id="name-err" role="alert"></p>
         </div>
         <div class="field">${landingField}</div>

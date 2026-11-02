@@ -1,5 +1,6 @@
 // לוח הבקרה: חישוב השלב של כל מחזור, והכרטיסים הצפים (ARCHITECTURE סעיף 5, "לוח בקרה"; DESIGN מסך 1א).
 // מחושב בדפדפן מתוך posts, בכל טעינה. זהה ליוסי ולשרית, ולצפייה בלבד.
+// חישוב השלב והפס משותפים גם ל"המשימות שלי" ולרשימת המחזור (ARCHITECTURE סעיף 5, "אותו חישוב במסכים נוספים").
 
 import { DUE_DAYS } from "./config.js";
 import { listPosts, LENGTHS } from "./posts.js";
@@ -49,25 +50,33 @@ export function computeCycles(posts) {
     .sort((a, b) => (a.stage === "done") - (b.stage === "done") || b.cycle.localeCompare(a.cycle));
 }
 
-// ===== המסך =====
+// ===== השלב בטקסט ובפס, לכל המסכים =====
 
-function stageText(c) {
-  return c.who ? `${PEOPLE[c.who]} – ${STAGE_LABELS[c.stage]}` : STAGE_LABELS[c.stage];
+export function stageText(c) {
+  return c.who ? `${PEOPLE[c.who]} - ${STAGE_LABELS[c.stage]}` : STAGE_LABELS[c.stage];
 }
 
 // פס בשלושה מקטעים, מקטע לכל שלב (ARCHITECTURE סעיף 5): שלב שעבר מלא, השלב הנוכחי לפי ההתקדמות,
 // ושלב עתידי ריק. במחזור שהושלם שלושתם מלאים
 const BAR_STAGES = ["edit", "text", "complete"];
 
-function barHtml(c) {
+// cls: מחלקה נוספת לגודל, למשל לפס הקטן ברשימת המחזור
+export function stageBar(c, cls = "") {
   const current = c.stage === "done" ? BAR_STAGES.length : BAR_STAGES.indexOf(c.stage);
   const pct = c.total ? Math.round((c.done / c.total) * 100) : 0;
   const segs = BAR_STAGES.map((stage, i) => {
     const fill = i < current ? 100 : i === current ? pct : 0;
     return `<span class="fc-seg seg-${stage}"><span style="inline-size: ${fill}%"></span></span>`;
   });
-  return `<span class="fc-bar" aria-hidden="true">${segs.join("")}</span>`;
+  return `<span class="fc-bar${cls ? ` ${cls}` : ""}" aria-hidden="true">${segs.join("")}</span>`;
 }
+
+// נקודה בצבע השלב, לעמודת המשימה ב"המשימות שלי"
+export function stageDot(stage) {
+  return `<span class="stage-dot dot-${stage}" aria-hidden="true"></span>`;
+}
+
+// ===== המסך =====
 
 function cardHtml(c) {
   // הנחה: במחזור שהושלם אין אצל מי, ולכן במקום האווטאר מוצג סימן ✓
@@ -81,7 +90,7 @@ function cardHtml(c) {
         </span>
         <span class="fc-stage">${stageText(c)}</span>
         <span class="fc-line">${c.line}</span>
-        ${barHtml(c)}
+        ${stageBar(c)}
         ${c.due ? `<span class="fc-due">יעד ${shortDate(c.due)}</span>` : ""}
       </a>
     </li>`;

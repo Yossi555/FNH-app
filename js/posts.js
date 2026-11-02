@@ -5,6 +5,7 @@ import { getDb, saveDb } from "./mock/store.js";
 import { START_POST_NUMBER } from "./config.js";
 import { createRows, renameRows } from "./rows.js";
 import { esc, icon, badge, openModal, rerender, listOrigin, setFlash, renderFlash, $, $$ } from "./ui.js";
+import { cycleStage, stageText, stageBar } from "./dashboard.js";
 
 export async function listPosts() {
   return getDb().posts.map((p) => ({ ...p }));
@@ -276,6 +277,14 @@ function bottomActions(posts, isOwner) {
   return button ? `<div class="bottom-actions">${button}</div>` : "";
 }
 
+// פס שלב מתחת לכותרת, עם אותו חישוב כמו בלוח הבקרה (DESIGN מסך 3א).
+// הנחה: במחזור חדש, עוד בלי פוסטים, אין פס
+function stageHtml(posts) {
+  if (!posts.length) return "";
+  const c = cycleStage(posts);
+  return `${stageBar(c, "bar-small")}<span class="small">${stageText(c)}</span>`;
+}
+
 export async function cycleScreen(cycle, user) {
   const posts = await listCycle(cycle);
   const isOwner = user.role === "owner";
@@ -286,6 +295,7 @@ export async function cycleScreen(cycle, user) {
       <h1 class="page-title" tabindex="-1">מחזור <span dir="ltr">${esc(cycle)}</span></h1>
       ${isOwner ? `<button class="btn btn-primary" id="add-post">+ הוספת פוסט</button>` : ""}
     </div>
+    <p class="cycle-stage" id="cycle-stage">${stageHtml(posts)}</p>
     <div class="flash-area">${renderFlash()}</div>
     <div id="post-list">${renderPosts(posts, isOwner)}</div>
     ${bottomActions(posts, isOwner)}`;
@@ -324,6 +334,7 @@ export async function cycleScreen(cycle, user) {
         $$(`[data-badge="${number}"]`, list).forEach((el) => { el.innerHTML = badge(postStatus(post)); });
         const all = $("#finish-all");
         if (all) all.disabled = posts.every((p) => p.finished);
+        $("#cycle-stage").innerHTML = stageHtml(posts);
         return;
       }
       const box = e.target.closest("input[data-field]");
@@ -331,6 +342,10 @@ export async function cycleScreen(cycle, user) {
       const { post, field } = box.dataset;
       await updatePost(post, { [field]: box.checked });
       $$(`input[data-post="${post}"][data-field="${field}"]`, list).forEach((b) => { b.checked = box.checked; });
+      // סימון אורך משנה את ההתקדמות של "עריכה והזנה" בפס
+      const changed = posts.find((p) => p.post_number === post);
+      if (changed) changed[field] = box.checked;
+      $("#cycle-stage").innerHTML = stageHtml(posts);
     });
 
     $("#add-post")?.addEventListener("click", () => openNewPost(cycle));

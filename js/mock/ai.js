@@ -39,7 +39,7 @@ function fieldText(field, { name, version, linkIds, ytSeconds }, variant = 0) {
       : [`A ${secs}-second look at ${name}. Simple, warm, and made at home.`,
          `${name} in ${secs} seconds: melt, pour, and let it glow.`],
     on_image_text: [`${name} · ${version}`, `Made by hand · ${version}`],
-    title: [`${name} – Handmade Candle`, `How I Made ${name} at Home`],
+    title: [`${name} - Handmade Candle`, `How I Made ${name} at Home`],
     description: [
       [`Poured by hand, one candle at a time.`, ...linkLines(linkIds)].join("\n"),
       [`A cozy little project for a slow weekend.`, ...linkLines(linkIds)].join("\n"),
